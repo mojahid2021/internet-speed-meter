@@ -42,7 +42,12 @@ export default class SpeedMeterExtension extends Extension {
         this._settings = this.getSettings();
         this._loadSettings();
         this._settingsChangedId = this._settings.connect(
-            'changed', () => this._loadSettings(),
+            'changed', (_, key) => {
+                this._loadSettings();
+                if (key === 'refresh-interval') {
+                    this._restartTimer();
+                }
+            },
         );
 
         this._indicator = new PanelMenu.Button(0.0, this.metadata.name, false);
@@ -64,9 +69,18 @@ export default class SpeedMeterExtension extends Extension {
         Main.panel.addToStatusArea(this.uuid, this._indicator);
 
         this._procFile = Gio.File.new_for_path(PROC_NET_DEV);
+        this._restartTimer();
+    }
 
+    private _restartTimer(): void {
+        if (this._timeoutId) {
+            GLib.Source.remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
+
+        const interval = this._settings?.get_int('refresh-interval') ?? REFRESH_MS;
         this._timeoutId = GLib.timeout_add(
-            GLib.PRIORITY_DEFAULT, REFRESH_MS, () => {
+            GLib.PRIORITY_DEFAULT, interval, () => {
                 this._tick();
                 return GLib.SOURCE_CONTINUE;
             },
