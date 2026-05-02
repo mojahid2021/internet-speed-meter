@@ -1,0 +1,26 @@
+/*
+ * Internet Speed Meter — Stylesheet
+ *
+ * GNOME Shell uses a CSS subset (St/Clutter CSS).
+ * Standard web CSS properties like `display`, `flexbox`, or `grid` are NOT supported.
+ * Use St-specific properties and Clutter layout managers instead.
+ *
+ * @see https://gjs.guide/extensions/topics/style.html
+ */
+
+/* ─── Panel Container ─────────────────────────────────────────────────────── */
+
+.speed-meter-box {
+    spacing: 4px;
+    padding: 0 8px;
+}
+
+/* ─── Speed Label ─────────────────────────────────────────────────────────── */
+
+.speed-meter-label {
+    font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #e0e0e0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}

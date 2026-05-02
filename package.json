@@ -1,0 +1,42 @@
+{
+  "name": "speed-meter-gnome-extension",
+  "version": "1.0.0",
+  "description": "A lightweight GNOME Shell extension that displays real-time network upload/download speeds in the top panel.",
+  "type": "module",
+  "private": true,
+  "author": "Mojahid <mojahid@lunecode.com>",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mojahid2021/internet-speed-meter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mojahid2021/internet-speed-meter/issues"
+  },
+  "homepage": "https://mojahid.lunecode.com",
+  "keywords": [
+    "gnome",
+    "gnome-shell",
+    "extension",
+    "network",
+    "speed-meter",
+    "internet",
+    "bandwidth",
+    "monitor"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@girs/gjs": "latest",
+    "@girs/gnome-shell": "latest",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "package": "npm run build && make pack"
+  }
+}

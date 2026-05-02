@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="speed-meter@mojahid.lunecode.com">
+  <schema id="org.gnome.shell.extensions.speed-meter"
+          path="/org/gnome/shell/extensions/speed-meter/">
+
+    <key name="refresh-interval" type="i">
+      <default>1500</default>
+      <summary>Refresh interval in milliseconds</summary>
+      <description>
+        How frequently the network speed is polled from /proc/net/dev.
+        Lower values give more responsive readings but consume more CPU.
+        Recommended range: 1000–3000.
+      </description>
+    </key>
+
+    <key name="use-bits" type="b">
+      <default>false</default>
+      <summary>Display speed in bits per second</summary>
+      <description>
+        When true, speeds are shown in Kbps/Mbps (bits).
+        When false, speeds are shown in KB/s/MB/s (bytes).
+        Default is bytes (false).
+      </description>
+    </key>
+
+    <key name="show-upload" type="b">
+      <default>true</default>
+      <summary>Show upload speed</summary>
+      <description>Whether to display the upload (TX) speed in the panel.</description>
+    </key>
+
+    <key name="show-download" type="b">
+      <default>true</default>
+      <summary>Show download speed</summary>
+      <description>Whether to display the download (RX) speed in the panel.</description>
+    </key>
+
+  </schema>
+</schemalist>
