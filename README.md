@@ -8,9 +8,9 @@
 <h1 align="center">🌐 Internet Speed Meter</h1>
 
 <p align="center">
-  <strong>A lightweight, real-time network speed monitor for the GNOME Shell top panel.</strong>
+  <strong>A professional, high-performance network speed monitor and statistics tracker for the GNOME Shell top panel.</strong>
   <br />
-  Displays upload and download speeds with minimal CPU overhead.
+  Authored in TypeScript with a focus on zero-impact resource usage and deep system integration.
   <br />
   <br />
   <a href="https://github.com/mojahid2021/internet-speed-meter/issues">Report Bug</a>
@@ -22,21 +22,21 @@
 
 ## ✨ Features
 
-- **Real-Time Monitoring** — Displays live download (↓) and upload (↑) speeds directly in the GNOME top panel
-- **Minimal Footprint** — Asynchronous I/O reads from `/proc/net/dev` with ~0% idle CPU impact
-- **Auto-Aggregation** — Sums traffic across all active network interfaces (Wi-Fi, Ethernet, VPN)
-- **Smart Formatting** — Automatically scales units between B/s → KB/s → MB/s
-- **GNOME 50 Native** — Pure ESM architecture built for the latest GNOME Shell runtime
-- **Type-Safe** — Authored in TypeScript with full `@girs` type coverage for GNOME APIs
+- **🚀 Real-Time Monitoring** — Live download (↓) and upload (↑) speeds in the top panel.
+- **📊 Usage Statistics** — Click the speed to view detailed traffic stats for **Today**, **This Month**, and **Last Month** (calendar-based).
+- **⚙️ Native Preferences** — Full configuration window (Libadwaita) to toggle bits/bytes, refresh rate, and visibility.
+- **⚡ Deeply Optimized** — Asynchronous I/O, static object reuse, and UI redraw guards ensure ~0% CPU and minimal memory impact.
+- **🔄 Auto-Aggregation** — Automatically sums traffic across Wi-Fi, Ethernet, VPN, and other active interfaces.
+- **💾 Persistent History** — Automatically tracks and saves your data usage to `~/.cache/internet-speed-meter/stats.json`.
+- **🖥️ GNOME 50+ Ready** — Pure ESM architecture fully compatible with GNOME 45 through 50+.
 
 ## 📦 Requirements
 
 | Dependency | Version | Notes |
 |------------|---------|-------|
-| GNOME Shell | 45 – 50 | Any distro running GNOME (Ubuntu, Fedora, Arch, openSUSE, Debian, etc.) |
-| Node.js | 18+ | Build-time only |
-| TypeScript | 5.4+ | Installed via npm |
-| GLib | System package | Provides `glib-compile-schemas` |
+| GNOME Shell | 45 – 50 | Ubuntu, Fedora, Arch, Debian, openSUSE, etc. |
+| Node.js | 18+ | Build-time only (npm install) |
+| libglib2.0-dev | System | Provides `glib-compile-schemas` |
 
 ## 🚀 Quick Start
 
@@ -54,135 +54,66 @@ make install
 gnome-extensions enable speed-meter@mojahid.lunecode.com
 ```
 
-### Enable / Disable
-
-```bash
-# Enable
-gnome-extensions enable speed-meter@mojahid.lunecode.com
-
-# Disable
-gnome-extensions disable speed-meter@mojahid.lunecode.com
-```
-
-> **Note:** On Wayland, you may need to log out and back in for the extension to appear. On X11, press `Alt+F2` → type `r` → `Enter` to restart GNOME Shell.
+> **Note:** On Wayland (default on most distros), you must **Log Out and Log Back In** for the extension and its settings button to appear for the first time.
 
 ## 🏗️ Project Structure
 
 ```
 internet-speed-meter/
 ├── src/
-│   ├── extension.ts          # Main extension logic (TypeScript)
-│   ├── stylesheet.css         # GNOME Shell panel styles
-│   ├── ambient.d.ts           # GJS/GNOME type declarations
+│   ├── extension.ts          # Panel indicator logic
+│   ├── prefs.ts              # Settings UI (Libadwaita)
+│   ├── stats.ts              # Traffic persistence engine
+│   ├── stylesheet.css         # Panel styling
 │   ├── metadata.json          # Extension manifest
-│   └── schemas/
-│       └── org.gnome.shell.extensions.speed-meter.gschema.xml
-├── package.json               # Node.js dependencies & scripts
-├── tsconfig.json              # TypeScript compiler configuration
-├── Makefile                   # Build automation
-├── LICENSE                    # GPL-3.0-or-later
+│   └── schemas/              # GSettings configuration
+├── Makefile                   # Build & deployment automation
+├── LICENSE                    # GNU GPL v3.0
 ├── CHANGELOG.md               # Version history
-├── CONTRIBUTING.md            # Contribution guidelines
-└── .editorconfig              # Editor formatting rules
+└── CONTRIBUTING.md            # Community guidelines
 ```
 
-## 🔧 Development
-
-### Prerequisites
-
-```bash
-# Install the GLib schema compiler for your distribution:
-sudo apt install libglib2.0-dev          # Ubuntu / Debian / Pop!_OS / Zorin
-sudo dnf install glib2-devel             # Fedora / RHEL / CentOS Stream
-sudo pacman -S glib2                     # Arch / Manjaro / EndeavourOS
-sudo zypper install glib2-devel          # openSUSE
-sudo emerge dev-libs/glib                # Gentoo
-```
-
-### Build Commands
-
-| Command | Description |
-|---------|-------------|
-| `make` | Clean + compile TypeScript + assemble dist/ |
-| `make install` | Build + install to `~/.local/share/gnome-shell/extensions/` |
-| `make pack` | Build + create `.zip` for [extensions.gnome.org](https://extensions.gnome.org) |
-| `make test` | Install + launch nested GNOME Shell for testing |
-| `make uninstall` | Remove the extension |
-| `make clean` | Remove build artifacts |
-
-### Testing in a Nested Shell
-
-```bash
-make test
-```
-
-This launches a sandboxed GNOME Shell session via `dbus-run-session gnome-shell --nested --wayland`, so you can test without affecting your live desktop.
-
-### Viewing Logs
-
-```bash
-journalctl -f -o cat /usr/bin/gnome-shell | grep -i speed
-```
-
-## ⚙️ How It Works
+## ⚙️ How It Works (Optimized Pipeline)
 
 ```
 ┌──────────────┐    async read     ┌──────────────────┐
-│ /proc/net/dev│ ───────────────►  │  Parse RX/TX     │
-│  (kernel)    │   every 1.5s      │  per interface   │
+│ /proc/net/dev│ ───────────────►  │ Delta Calculation│
+│  (kernel)    │   low-priority    │ (reused decoder) │
 └──────────────┘                   └────────┬─────────┘
                                             │
-                                            ▼
-                                   ┌──────────────────┐
-                                   │  Calculate Δ     │
-                                   │  bytes/sec       │
-                                   └────────┬─────────┘
-                                            │
-                                            ▼
-                                   ┌──────────────────┐
-                                   │  Format & render │
-                                   │  to St.Label     │
-                                   └──────────────────┘
+        ┌───────────────────────────────────┴────────────────┐
+        ▼                                                    ▼
+┌──────────────────┐     dirty check       ┌──────────────────┐
+│  Update Label    │ ◄──────────────────── │  Update Stats    │
+│  (Change Guard)  │      60s save         │  (Disk I/O Sync) │
+└──────────────────┘                       └──────────────────┘
 ```
 
-1. **Read** — Asynchronously reads `/proc/net/dev` via `Gio.File.load_contents_async()`
-2. **Parse** — Extracts RX (received) and TX (transmitted) byte counters for all non-loopback interfaces
-3. **Calculate** — Computes bytes/second using monotonic time delta between polls
-4. **Render** — Updates the `St.Label` in the GNOME Shell panel with human-readable speeds
+1. **Smart Reading** — Uses `load_contents_async` to fetch data without blocking the UI thread.
+2. **Object Reuse** — Uses static `TextDecoder` and `TextEncoder` to prevent Memory/GC churn.
+3. **Change Guard** — Only requests a UI redraw if the speed text has actually changed.
+4. **Stats Logic** — Calculates deltas between ticks and pushes them to a local cache for daily/monthly tracking.
 
-## 🛠️ Tech Stack
+## 🛠️ Build Commands
 
-| Layer | Technology |
-|-------|-----------|
-| Language | TypeScript 5+ → ES2023 ESM |
-| Runtime | GJS (SpiderMonkey 128+) |
-| UI Toolkit | St (Shell Toolkit) + Clutter |
-| System I/O | Gio (GLib I/O) |
-| Build | tsc + GNU Make |
-| Types | @girs/gjs + @girs/gnome-shell |
+| Command | Description |
+|---------|-------------|
+| `make install` | Build, compile schemas, and install to GNOME |
+| `make pack` | Generate `.zip` for extensions.gnome.org |
+| `make test` | Launch a nested Wayland shell for safe testing |
+| `make logs` | Stream GNOME Shell logs filtered for this extension |
 
 ## 📄 License
 
-This project is licensed under the **GNU General Public License v3.0 or later** — see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Licensed under the **GNU General Public License v3.0 or later**.
 
 ## 👤 Author
 
 **Mojahid** — [@mojahid2021](https://github.com/mojahid2021)
-
 - Website: [mojahid.lunecode.com](https://mojahid.lunecode.com)
 
 ---
 
 <p align="center">
-  Made with ❤️ for the GNOME Desktop
+  Made with ❤️ for the Linux community.
 </p>

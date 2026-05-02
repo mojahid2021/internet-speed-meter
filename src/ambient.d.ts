@@ -9,6 +9,25 @@
 import '@girs/gjs/ambient';
 import '@girs/gnome-shell/ambient';
 
+declare module 'resource:///org/gnome/shell/ui/popupMenu.js' {
+    export class PopupMenu extends GObject.Object {
+        addMenuItem(item: any, position?: number): void;
+        removeAll(): void;
+    }
+    export class PopupMenuItem extends GObject.Object {
+        constructor(text: string, params?: any);
+        label: any;
+        add_style_class_name(name: string): void;
+    }
+    export class PopupSeparatorMenuItem extends GObject.Object {}
+    export class PopupSubMenuMenuItem extends GObject.Object {
+        constructor(text: string, wantIcon?: boolean);
+        label: any;
+        menu: PopupMenu;
+    }
+}
+
+
 declare module 'resource:///org/gnome/shell/extensions/extension.js' {
     export class Extension {
         uuid: string;
@@ -29,6 +48,11 @@ declare global {
             input?: Uint8Array | ArrayBuffer,
             options?: { stream?: boolean },
         ): string;
+    }
+
+    class TextEncoder {
+        constructor();
+        encode(input?: string): Uint8Array;
     }
 
     /**
