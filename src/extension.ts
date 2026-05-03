@@ -314,14 +314,50 @@ export default class SpeedMeterExtension extends Extension {
         }
 
         this._statsManager?.save();
-        this._indicator?.destroy();
-        this._indicator = null;
-        this._box = null;
-        this._label = null;
+
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+
+        if (this._box) {
+            this._box.destroy();
+            this._box = null;
+        }
+
+        if (this._label) {
+            this._label.destroy();
+            this._label = null;
+        }
+
+        if (this._activityGraph) {
+            this._activityGraph.destroy();
+            this._activityGraph = null;
+        }
+
+        if (this._menuToday) {
+            (this._menuToday as any).destroy();
+            this._menuToday = null;
+        }
+
+        if (this._menuThisMonth) {
+            (this._menuThisMonth as any).destroy();
+            this._menuThisMonth = null;
+        }
+
+        if (this._menuLastMonth) {
+            (this._menuLastMonth as any).destroy();
+            this._menuLastMonth = null;
+        }
+
+        if (this._menuSession) {
+            (this._menuSession as any).destroy();
+            this._menuSession = null;
+        }
+
         this._procFile = null;
         this._settings = null;
         this._statsManager = null;
-        this._activityGraph = null;
         this._lastLabelText = '';
     }
 }
