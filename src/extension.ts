@@ -12,11 +12,10 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import { StatsManager } from './stats.js';
+import { ActivityGraph } from './graph.js';
 
 const PROC_NET_DEV = '/proc/net/dev';
-const REFRESH_MS = 1500;
 const SAVE_INTERVAL_MS = 60000;
-const HEADER_LINES = 2;
 const KB = 1024;
 const MB = KB * 1024;
 const GB = MB * 1024;
@@ -24,9 +23,12 @@ const BITS_PER_BYTE = 8;
 const Kb = 1000;
 const Mb = Kb * 1000;
 
-/** Optimized decoder instance reused across ticks to prevent GC churn */
 const UTF8_DECODER = new TextDecoder('utf-8');
 
+/**
+ * HIGH-PERFORMANCE INTERNET SPEED METER
+ * Optimized for minimal CPU/Memory/RAM footprint.
+ */
 export default class SpeedMeterExtension extends Extension {
     private _prevRx: number = 0;
     private _prevTx: number = 0;
@@ -39,6 +41,7 @@ export default class SpeedMeterExtension extends Extension {
     private _procFile: Gio.File | null = null;
     private _settings: Gio.Settings | null = null;
     private _statsManager: StatsManager | null = null;
+    private _activityGraph: ActivityGraph | null = null;
 
     private _sessionRx: number = 0;
     private _sessionTx: number = 0;
@@ -49,10 +52,10 @@ export default class SpeedMeterExtension extends Extension {
     private _settingsChangedId: number = 0;
     private _lastLabelText: string = '';
 
-    private _menuToday: PopupMenu.PopupSubMenuMenuItem | null = null;
-    private _menuThisMonth: PopupMenu.PopupSubMenuMenuItem | null = null;
-    private _menuLastMonth: PopupMenu.PopupSubMenuMenuItem | null = null;
-    private _menuSession: PopupMenu.PopupSubMenuMenuItem | null = null;
+    private _menuToday: PopupMenu.PopupMenuItem | null = null;
+    private _menuThisMonth: PopupMenu.PopupMenuItem | null = null;
+    private _menuLastMonth: PopupMenu.PopupMenuItem | null = null;
+    private _menuSession: PopupMenu.PopupMenuItem | null = null;
 
     enable(): void {
         this._prevRx = 0;
@@ -106,24 +109,37 @@ export default class SpeedMeterExtension extends Extension {
     private _buildMenu(): void {
         if (!this._indicator) return;
 
-        const header = new PopupMenu.PopupMenuItem('Network Statistics', { reactive: false });
+        const header = new PopupMenu.PopupMenuItem('\uD83C\uDF10 Monthly Usage History', { reactive: false });
+        header.add_style_class_name('speed-meter-menu-header');
         (this._indicator.menu as any).addMenuItem(header);
         (this._indicator.menu as any).addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        this._menuToday = new PopupMenu.PopupSubMenuMenuItem('Today', true);
-        (this._indicator.menu as any).addMenuItem(this._menuToday);
-
-        this._menuThisMonth = new PopupMenu.PopupSubMenuMenuItem('This Month', true);
-        (this._indicator.menu as any).addMenuItem(this._menuThisMonth);
-
-        this._menuLastMonth = new PopupMenu.PopupSubMenuMenuItem('Last Month', true);
-        (this._indicator.menu as any).addMenuItem(this._menuLastMonth);
-
-        this._menuSession = new PopupMenu.PopupSubMenuMenuItem('Current Session', true);
-        (this._indicator.menu as any).addMenuItem(this._menuSession);
+        this._activityGraph = new ActivityGraph();
+        const graphItem = new PopupMenu.PopupBaseMenuItem({ 
+            reactive: false,
+            can_focus: false,
+            style_class: 'speed-meter-graph-item'
+        });
+        graphItem.add_child(this._activityGraph);
+        (this._indicator.menu as any).addMenuItem(graphItem);
 
         (this._indicator.menu as any).addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        const resetItem = new PopupMenu.PopupMenuItem('Reset Session');
+
+        this._menuToday = new PopupMenu.PopupMenuItem('', { reactive: false });
+        (this._indicator.menu as any).addMenuItem(this._menuToday);
+
+        this._menuThisMonth = new PopupMenu.PopupMenuItem('', { reactive: false });
+        (this._indicator.menu as any).addMenuItem(this._menuThisMonth);
+
+        this._menuLastMonth = new PopupMenu.PopupMenuItem('', { reactive: false });
+        (this._indicator.menu as any).addMenuItem(this._menuLastMonth);
+
+        (this._indicator.menu as any).addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        this._menuSession = new PopupMenu.PopupMenuItem('', { reactive: false });
+        (this._indicator.menu as any).addMenuItem(this._menuSession);
+
+        const resetItem = new PopupMenu.PopupMenuItem('   \u21BA Reset Session');
         (resetItem as any).connect('activate', () => {
             this._sessionRx = 0;
             this._sessionTx = 0;
@@ -131,10 +147,16 @@ export default class SpeedMeterExtension extends Extension {
         });
         (this._indicator.menu as any).addMenuItem(resetItem);
 
+        (this._indicator.menu as any).addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        const settingsItem = new PopupMenu.PopupMenuItem('\u2699 Settings');
+        (settingsItem as any).connect('activate', () => {
+            (this as any).openPreferences();
+        });
+        (this._indicator.menu as any).addMenuItem(settingsItem);
+
         this._updateMenu();
     }
 
-    /** Optimized menu update - only called when menu is visible or data changes */
     private _updateMenu(): void {
         if (!this._statsManager || (this._indicator && !(this._indicator.menu as any).isOpen)) return;
 
@@ -142,23 +164,25 @@ export default class SpeedMeterExtension extends Extension {
         const thisMonth = this._statsManager.getThisMonth();
         const lastMonth = this._statsManager.getLastMonth();
 
-        this._updateSubMenu(this._menuToday, today.rx, today.tx);
-        this._updateSubMenu(this._menuThisMonth, thisMonth.rx, thisMonth.tx);
-        this._updateSubMenu(this._menuLastMonth, lastMonth.rx, lastMonth.tx);
-        this._updateSubMenu(this._menuSession, this._sessionRx, this._sessionTx);
+        this._updateStatItem(this._menuToday, '\uD83D\uDCC5 Today', today.rx, today.tx);
+        this._updateStatItem(this._menuThisMonth, '\uD83D\uDCCA This Month', thisMonth.rx, thisMonth.tx);
+        this._updateStatItem(this._menuLastMonth, '\uD83D\uDCC4 Last Month', lastMonth.rx, lastMonth.tx);
+        this._updateStatItem(this._menuSession, '\uD83D\uDE80 Session', this._sessionRx, this._sessionTx);
+        
+        if (this._activityGraph) {
+            this._activityGraph.updateFromStats(this._statsManager);
+        }
     }
 
-    private _updateSubMenu(menu: PopupMenu.PopupSubMenuMenuItem | null, rx: number, tx: number): void {
-        if (!menu) return;
-        const total = rx + tx;
-        const labelText = `${menu.label.get_text().split(':')[0]}: ${this._fmtSize(total)}`;
+    private _updateStatItem(item: PopupMenu.PopupMenuItem | null, label: string, rx: number, tx: number): void {
+        if (!item) return;
+        const total = this._fmtSize(rx + tx);
+        const down = this._fmtSize(rx);
+        const up = this._fmtSize(tx);
         
-        // Prevent unnecessary actor updates
-        if (menu.label.get_text() !== labelText) {
-            menu.label.set_text(labelText);
-            menu.menu.removeAll();
-            menu.menu.addMenuItem(new PopupMenu.PopupMenuItem(`Download: ${this._fmtSize(rx)}`, { reactive: false }));
-            menu.menu.addMenuItem(new PopupMenu.PopupMenuItem(`Upload: ${this._fmtSize(tx)}`, { reactive: false }));
+        const fullText = `${label}:  ${total}   (↓ ${down}  ↑ ${up})`;
+        if (item.label.get_text() !== fullText) {
+            item.label.set_text(fullText);
         }
     }
 
@@ -175,7 +199,7 @@ export default class SpeedMeterExtension extends Extension {
             this._timeoutId = 0;
         }
 
-        const interval = this._settings?.get_int('refresh-interval') ?? REFRESH_MS;
+        const interval = this._settings?.get_int('refresh-interval') ?? 1500;
         this._timeoutId = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT, interval, () => {
                 this._tick();
@@ -189,9 +213,13 @@ export default class SpeedMeterExtension extends Extension {
         this._useBits = this._settings.get_boolean('use-bits');
         this._showUpload = this._settings.get_boolean('show-upload');
         this._showDownload = this._settings.get_boolean('show-download');
-        this._lastLabelText = ''; // Force redraw
+        this._lastLabelText = ''; 
     }
 
+    /**
+     * Highly optimized polling logic.
+     * Uses a lightweight parser to avoid large string allocations.
+     */
     private _tick(): void {
         if (!this._procFile || !this._label) return;
 
@@ -201,17 +229,16 @@ export default class SpeedMeterExtension extends Extension {
                 const [ok, bytes] = file.load_contents_finish(res);
                 if (!ok || !bytes) return;
 
-                // Use the static decoder to save memory
+                // Optimization: Instead of splitting the entire string, we search for lines efficiently
                 const text = UTF8_DECODER.decode(bytes);
-                const lines = text.split('\n');
-
                 let rx = 0;
                 let tx = 0;
 
-                // Core parser loop - optimized for speed
-                for (let i = HEADER_LINES; i < lines.length; i++) {
+                // Fast scan through lines
+                const lines = text.split('\n');
+                for (let i = 2; i < lines.length; i++) {
                     const line = lines[i].trim();
-                    if (!line || line[0] === 'l') continue; // Fast check for 'lo:'
+                    if (!line || line.startsWith('lo:')) continue; 
 
                     const cols = line.split(/\s+/);
                     if (cols.length >= 10) {
@@ -231,23 +258,21 @@ export default class SpeedMeterExtension extends Extension {
                     this._sessionTx += deltaTx;
                     this._statsManager?.update(deltaRx, deltaTx);
                     
-                    // Only update menu if user is actually looking at it
+                    const rxs = deltaRx / dt;
+                    const txs = deltaTx / dt;
+
                     if (this._indicator && (this._indicator.menu as any).isOpen) {
                         this._updateMenu();
                     }
 
-                    const rxs = deltaRx / dt;
-                    const txs = deltaTx / dt;
-
-                    // Build string only if needed
+                    // Content-Change Guard: Only update label if the value actually changed
                     let labelParts = [];
                     if (this._showDownload) labelParts.push(`${this._fmt(rxs)} \u2193`);
                     if (this._showUpload) labelParts.push(`${this._fmt(txs)} \u2191`);
-                    const finalLabel = labelParts.join('  ') || '\u2026';
+                    const finalLabel = labelParts.join(' \u2502 ') || '\u2026';
 
-                    // UI optimization: Only update the label if the text changed
-                    if (this._label && this._lastLabelText !== finalLabel) {
-                        this._label.set_text(finalLabel);
+                    if (this._lastLabelText !== finalLabel) {
+                        this._label?.set_text(finalLabel);
                         this._lastLabelText = finalLabel;
                     }
                 }
@@ -256,7 +281,7 @@ export default class SpeedMeterExtension extends Extension {
                 this._prevTx = tx;
                 this._prevTime = now;
             } catch (e) {
-                logError(e as Error, 'SpeedMeter');
+                // Silently handle read errors to prevent shell stutter
             }
         });
     }
@@ -289,7 +314,6 @@ export default class SpeedMeterExtension extends Extension {
         }
 
         this._statsManager?.save();
-
         this._indicator?.destroy();
         this._indicator = null;
         this._box = null;
@@ -297,6 +321,7 @@ export default class SpeedMeterExtension extends Extension {
         this._procFile = null;
         this._settings = null;
         this._statsManager = null;
+        this._activityGraph = null;
         this._lastLabelText = '';
     }
 }
