@@ -1,8 +1,10 @@
 <p align="center">
+  <a href="https://extensions.gnome.org/extension/9828/internet-speed-meter/">
+    <img src="https://img.shields.io/badge/GNOME_Extensions-9828-4A86CF?style=for-the-badge&logo=gnome&logoColor=white" alt="GNOME Extension" />
+  </a>
   <img src="https://img.shields.io/badge/GNOME_Shell-45--50-4A86CF?style=for-the-badge&logo=gnome&logoColor=white" alt="GNOME Shell 45–50" />
   <img src="https://img.shields.io/badge/TypeScript-5.4+-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge" alt="License" />
-  <img src="https://img.shields.io/badge/Platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux" />
 </p>
 
 <h1 align="center">🌐 Internet Speed Meter</h1>
@@ -13,9 +15,11 @@
   Authored in TypeScript with a focus on zero-impact resource usage and deep system integration.
   <br />
   <br />
-  <a href="https://github.com/mojahid2021/internet-speed-meter/issues">Report Bug</a>
+  <a href="https://extensions.gnome.org/extension/9828/internet-speed-meter/">Install Now</a>
   ·
-  <a href="https://github.com/mojahid2021/internet-speed-meter/issues">Request Feature</a>
+  <a href="https://github.com/foss-desk/internet-speed-meter/issues">Report Bug</a>
+  ·
+  <a href="https://github.com/foss-desk/internet-speed-meter/issues">Request Feature</a>
 </p>
 
 ---
@@ -38,13 +42,22 @@
 | Node.js | 18+ | Build-time only (npm install) |
 | libglib2.0-dev | System | Provides `glib-compile-schemas` |
 
-## 🚀 Quick Start
+## 📥 Installation
 
-### Install from Source
+### 🌍 GNOME Extensions (Recommended)
+The easiest way to install and stay updated is through the official GNOME Extensions website.
+
+<a href="https://extensions.gnome.org/extension/9828/internet-speed-meter/">
+  <img src="https://img.shields.io/badge/Install_on-GNOME_Extensions-4A86CF?style=for-the-badge&logo=gnome&logoColor=white" alt="Install from GNOME Extensions" />
+</a>
+
+---
+
+### 🛠️ Install from Source
 
 ```bash
 # Clone the repository
-git clone https://github.com/mojahid2021/internet-speed-meter.git
+git clone https://github.com/foss-desk/internet-speed-meter.git
 cd internet-speed-meter
 
 # Build and install
@@ -73,22 +86,6 @@ internet-speed-meter/
 └── CONTRIBUTING.md            # Community guidelines
 ```
 
-## ⚙️ How It Works (Optimized Pipeline)
-
-```
-┌──────────────┐    async read     ┌──────────────────┐
-│ /proc/net/dev│ ───────────────►  │ Delta Calculation│
-│  (kernel)    │   low-priority    │ (reused decoder) │
-└──────────────┘                   └────────┬─────────┘
-                                            │
-        ┌───────────────────────────────────┴────────────────┐
-        ▼                                                    ▼
-┌──────────────────┐     dirty check       ┌──────────────────┐
-│  Update Label    │ ◄──────────────────── │  Update Stats    │
-│  (Change Guard)  │      60s save         │  (Disk I/O Sync) │
-└──────────────────┘                       └──────────────────┘
-```
-
 1. **Smart Reading** — Uses `load_contents_async` to fetch data without blocking the UI thread.
 2. **Object Reuse** — Uses static `TextDecoder` and `TextEncoder` to prevent Memory/GC churn.
 3. **Change Guard** — Only requests a UI redraw if the speed text has actually changed.
@@ -106,14 +103,8 @@ internet-speed-meter/
 ## 📄 License
 
 Licensed under the **GNU General Public License v3.0 or later**.
-
-## 👤 Author
-
-**Mojahid** — [@mojahid2021](https://github.com/mojahid2021)
-- Website: [mojahid.lunecode.com](https://mojahid.lunecode.com)
-
 ---
 
 <p align="center">
-  Made with ❤️ for the Linux community.
+  Made by <a href="https://github.com/foss-desk">foss-desk</a> for the Linux community.
 </p>

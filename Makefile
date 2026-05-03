@@ -53,7 +53,8 @@ install: build
 
 pack: build
 	@echo "▸ Creating distribution archive…"
-	@cd $(DIST_DIR) && zip -r ../$(UUID).zip . -x "*.map"
+	@rm -f $(UUID).zip
+	@cd $(DIST_DIR) && zip -r ../$(UUID).zip . -x "*.map" "schemas/gschemas.compiled"
 	@echo "✔ Package created → $(UUID).zip"
 
 # ─── Test (Nested Shell) ─────────────────────────────────────────────────────

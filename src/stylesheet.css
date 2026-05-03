@@ -1,26 +1,48 @@
 /*
  * Internet Speed Meter — Stylesheet
- *
- * GNOME Shell uses a CSS subset (St/Clutter CSS).
- * Standard web CSS properties like `display`, `flexbox`, or `grid` are NOT supported.
- * Use St-specific properties and Clutter layout managers instead.
- *
- * @see https://gjs.guide/extensions/topics/style.html
+ * Optimized for GNOME 45+ (Libadwaita style)
  */
 
-/* ─── Panel Container ─────────────────────────────────────────────────────── */
-
 .speed-meter-box {
-    spacing: 4px;
-    padding: 0 8px;
+    spacing: 6px;
+    padding: 0 4px;
+    margin: 4px 0;
 }
 
-/* ─── Speed Label ─────────────────────────────────────────────────────────── */
-
 .speed-meter-label {
-    font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", monospace;
-    font-size: 11px;
-    font-weight: 700;
-    color: #e0e0e0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    /* Tabular-nums ensures the panel doesn't jitter when numbers change */
+    font-family: "Ubuntu Sans Mono", "JetBrains Mono", "Fira Code", "Source Code Pro", monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 10.5pt;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Styling */
+.speed-meter-menu-header {
+    font-weight: 800;
+    font-size: 11pt;
+    padding: 12px 16px 8px 16px;
+    color: #4A86CF;
+}
+
+/* Graph Item - Premium Card Style */
+.speed-meter-graph-item {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    margin: 6px 14px 12px 14px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.speed-meter-graph {
+    /* DrawingArea */
+}
+
+/* Menu Item Refinement */
+.popup-menu-item {
+    margin: 2px 0;
+    padding: 6px 16px;
 }

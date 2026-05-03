@@ -8,10 +8,10 @@
   "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mojahid2021/internet-speed-meter.git"
+    "url": "https://github.com/foss-desk/internet-speed-meter.git"
   },
   "bugs": {
-    "url": "https://github.com/mojahid2021/internet-speed-meter/issues"
+    "url": "https://github.com/foss-desk/internet-speed-meter/issues"
   },
   "homepage": "https://mojahid.lunecode.com",
   "keywords": [

@@ -2,8 +2,15 @@
   "name": "Internet Speed Meter",
   "description": "A lightweight, real-time network speed monitor for your GNOME Shell top panel. Displays upload and download speeds with minimal CPU overhead.",
   "uuid": "speed-meter@mojahid.lunecode.com",
-  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
   "version": 12,
-  "url": "https://github.com/mojahid2021/internet-speed-meter",
+  "url": "https://github.com/foss-desk/internet-speed-meter",
   "settings-schema": "org.gnome.shell.extensions.speed-meter"
 }
