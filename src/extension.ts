@@ -241,6 +241,8 @@ export default class SpeedMeterExtension extends Extension {
         item.add_child(mainBox);
         (item as any)._valueLabel = valueLabel;
         (item as any)._subLabel = subLabel;
+        (item as any)._lastTotal = '';
+        (item as any)._lastSub = '';
         
         return item;
     }
@@ -266,59 +268,65 @@ export default class SpeedMeterExtension extends Extension {
         const now = GLib.get_monotonic_time() / 1000000;
         if (now - this._lastNetworkUpdate < 30) return;
         this._lastNetworkUpdate = now;
-
-        // --- ASYNC PIPELINE ---
         
-        // 1. Get Interface & Connection Type (Fastest, usually ok to keep sync for /proc/net/route)
-        try {
-            const [ok, contents] = GLib.file_get_contents('/proc/net/route');
-            if (!ok) return;
-            const lines = UTF8_DECODER.decode(contents).split('\n');
-            let iface = '';
-            for (let i = 1; i < lines.length; i++) {
-                const cols = lines[i].trim().split(/\s+/);
-                if (cols[1] === '00000000') { iface = cols[0]; break; }
-            }
+        // 1. Get Interface & Connection Type (Async)
+        const routeFile = Gio.File.new_for_path('/proc/net/route');
+        routeFile.load_contents_async(null, (file, res) => {
+            try {
+                const [ok, contents] = file!.load_contents_finish(res);
+                if (!ok || !contents) return;
 
-            let type = 'Disconnected';
-            if (iface) {
-                if (iface.startsWith('wl')) type = 'WiFi';
-                else if (iface.startsWith('eth') || iface.startsWith('en')) type = 'Ethernet';
-                else if (iface.startsWith('ppp')) type = 'Mobile';
-                else if (iface.startsWith('tun') || iface.startsWith('wg')) type = 'VPN Tunnel';
-                else type = 'Wired';
-            }
-            if (this._ifaceValue) this._ifaceValue.set_text(`${type} (${iface || 'none'})`);
-
-            // 2. Async VPN Status
-            this._spawnAsync('ip addr', (stdout) => {
-                const hasVpn = /tun|tap|ppp|vpn|wg|tailscale|zero/i.test(stdout);
-                if (this._vpnValue) {
-                    this._vpnValue.set_text(hasVpn ? 'Active \u2705' : 'None');
-                    this._vpnValue.set_style(hasVpn ? 'color: #2ec27e; font-weight: bold;' : 'color: rgba(255,255,255,0.4);');
+                const lines = UTF8_DECODER.decode(contents).split('\n');
+                let iface = '';
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = lines[i].trim().split(/\s+/);
+                    if (cols[1] === '00000000') { iface = cols[0]; break; }
                 }
-            });
 
-            // 3. Async Local IP
-            if (iface) {
-                this._spawnAsync(`ip -4 addr show ${iface}`, (stdout) => {
-                    const match = stdout.match(/inet\s+(\d+\.\d+\.\d+\.\d+)/);
-                    if (match && this._ipValue) this._ipValue.set_text(match[1]);
-                });
-            }
-
-            // 4. Async Public IP
-            if (this._publicIpValue) this._publicIpValue.set_text('Fetching...');
-            const publicIpCmd = 'bash -c "curl -s --max-time 3 https://api.ipify.org || wget -qO- --timeout=3 https://icanhazip.com || python3 -c \'import urllib.request; print(urllib.request.urlopen(\"https://api.ipify.org\", timeout=3).read().decode())\' 2>/dev/null || echo Failed"';
-            this._spawnAsync(publicIpCmd, (stdout) => {
-                if (stdout && stdout.trim() !== 'Failed' && this._publicIpValue) {
-                    this._publicIpValue.set_text(stdout.trim());
-                } else if (this._publicIpValue) {
-                    this._publicIpValue.set_text('Unavailable');
+                let type = 'Disconnected';
+                if (iface) {
+                    if (iface.startsWith('wl')) type = 'WiFi';
+                    else if (iface.startsWith('eth') || iface.startsWith('en')) type = 'Ethernet';
+                    else if (iface.startsWith('ppp')) type = 'Mobile';
+                    else if (iface.startsWith('tun') || iface.startsWith('wg')) type = 'VPN Tunnel';
+                    else type = 'Wired';
                 }
-            });
+                if (this._ifaceValue) this._ifaceValue.set_text(`${type} (${iface || 'none'})`);
 
-        } catch (e) {}
+                // Chain the rest of the async checks
+                this._continueUpdateNetworkInfo(iface);
+            } catch (e) {}
+        });
+    }
+
+    private _continueUpdateNetworkInfo(iface: string): void {
+        // 2. Async VPN Status
+        this._spawnAsync('ip addr', (stdout) => {
+            const hasVpn = /tun|tap|ppp|vpn|wg|tailscale|zero/i.test(stdout);
+            if (this._vpnValue) {
+                this._vpnValue.set_text(hasVpn ? 'Active \u2705' : 'None');
+                this._vpnValue.set_style(hasVpn ? 'color: #2ec27e; font-weight: bold;' : 'color: rgba(255,255,255,0.4);');
+            }
+        });
+
+        // 3. Async Local IP
+        if (iface) {
+            this._spawnAsync(`ip -4 addr show ${iface}`, (stdout) => {
+                const match = stdout.match(/inet\s+(\d+\.\d+\.\d+\.\d+)/);
+                if (match && this._ipValue) this._ipValue.set_text(match[1]);
+            });
+        }
+
+        // 4. Async Public IP
+        if (this._publicIpValue) this._publicIpValue.set_text('Fetching...');
+        const publicIpCmd = 'bash -c "curl -s --max-time 3 https://api.ipify.org || wget -qO- --timeout=3 https://icanhazip.com || python3 -c \'import urllib.request; print(urllib.request.urlopen(\"https://api.ipify.org\", timeout=3).read().decode())\' 2>/dev/null || echo Failed"';
+        this._spawnAsync(publicIpCmd, (stdout) => {
+            if (stdout && stdout.trim() !== 'Failed' && this._publicIpValue) {
+                this._publicIpValue.set_text(stdout.trim());
+            } else if (this._publicIpValue) {
+                this._publicIpValue.set_text('Unavailable');
+            }
+        });
     }
 
     private _spawnAsync(cmd: string, callback: (stdout: string) => void): void {
@@ -339,15 +347,18 @@ export default class SpeedMeterExtension extends Extension {
 
     private _updateStatItem(item: PopupMenu.PopupBaseMenuItem | null, rx: number, tx: number): void {
         if (!item) return;
-        const total = this._fmtSize(rx + tx);
-        const down = this._fmtSize(rx);
-        const up = this._fmtSize(tx);
+        const totalStr = this._fmtSize(rx + tx);
+        const subStr = `(\u2193 ${this._fmtSize(rx)}  \u2191 ${this._fmtSize(tx)})`;
         
-        const valueLabel = (item as any)._valueLabel as St.Label;
-        const subLabel = (item as any)._subLabel as St.Label;
-
-        if (valueLabel) valueLabel.set_text(total);
-        if (subLabel) subLabel.set_text(`↓ ${down}   ↑ ${up}`);
+        // Change Guard: Only update if strings differ to save CPU/Layout work
+        if ((item as any)._lastTotal !== totalStr) {
+            (item as any)._valueLabel.set_text(totalStr);
+            (item as any)._lastTotal = totalStr;
+        }
+        if ((item as any)._lastSub !== subStr) {
+            (item as any)._subLabel.set_text(subStr);
+            (item as any)._lastSub = subStr;
+        }
     }
 
     private _fmtSize(bytes: number): string {

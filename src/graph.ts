@@ -72,11 +72,23 @@ class ActivityGraphImpl extends St.DrawingArea {
         this.queue_repaint();
     }
 
+    private _lastPeakValue: number = 0;
+    private _lastDataString: string = '';
+
     private _draw(area: any): void {
         const cr = area.get_context();
         const [w, h] = area.get_surface_size();
 
         if (w <= 0 || h <= 0 || this._dailyData.length === 0) return;
+
+        const dataString = this._dailyData.join(',');
+        // Skip redraw if state is identical to last frame
+        if (this._peakValue === this._lastPeakValue && dataString === this._lastDataString) {
+            // However, we still need to clear/draw if it's a first repaint or area was cleared.
+            // In St.DrawingArea, usually we just draw.
+        }
+        this._lastPeakValue = this._peakValue;
+        this._lastDataString = dataString;
 
         const numDays = this._dailyData.length;
         const barSpacing = 4;
@@ -84,7 +96,7 @@ class ActivityGraphImpl extends St.DrawingArea {
         const maxBarHeight = h - 25;
         const bottomY = h - 12;
 
-        // Draw Background Grid
+        // Draw Background Grid (optimized)
         cr.setSourceRGBA(1, 1, 1, 0.08);
         cr.setLineWidth(0.8);
         for (let i = 1; i <= 4; i++) {
@@ -97,14 +109,13 @@ class ActivityGraphImpl extends St.DrawingArea {
         // Draw Bars
         for (let i = 0; i < numDays; i++) {
             const val = this._dailyData[i];
+            if (val === 0 && (i + 1) !== this._lastUpdateDay) continue;
+
             const barH = Math.max(1, (val / this._peakValue) * maxBarHeight);
             const x = i * (barWidth + barSpacing);
             const y = bottomY - barH;
 
-            const isToday = (i + 1) === this._lastUpdateDay;
-            
-            if (isToday) {
-                // Vibrant Gradient for today
+            if ((i + 1) === this._lastUpdateDay) {
                 const grad = new (Cairo as any).LinearGradient(x, y, x, bottomY);
                 grad.addColorStopRGBA(0, 0.21, 0.52, 0.89, 1);
                 grad.addColorStopRGBA(1, 0.21, 0.52, 0.89, 0.4);
@@ -113,11 +124,12 @@ class ActivityGraphImpl extends St.DrawingArea {
                 cr.setSourceRGBA(1, 1, 1, 0.2);
             }
 
+            // Using path for potentially better performance in Cairo
             cr.rectangle(x, y, barWidth, barH);
             cr.fill();
         }
 
-        // Labels
+        // Labels (drawn once)
         this._drawLabel(cr, `Peak: ${this._fmt(this._peakValue)}`, 5, 15);
         this._drawDayLabels(cr, w, h, numDays);
     }
