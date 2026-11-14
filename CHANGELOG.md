@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-app traffic now follows the focused application as it changes (`notify::focus-app`); previously the app was only re-read when the menu opened, so traffic was credited to a stale app.
 - The route-table read on menu open is now cancellable on disable.
 - Application-usage history is now pruned like monthly history, and pruning runs on every save instead of only at the top of the hour.
+- Vertical panel layouts work on GNOME 45–47 again: `St.BoxLayout` only gained `orientation` in GNOME 48 (and lost `vertical` in 51), so the extension now picks the property for the running Shell version.
 
 ### Added
 - Translation support: every UI string is translatable (`gettext-domain` in metadata). The template is at `po/speed-meter@mojahid.lunecode.com.pot` (`make pot` regenerates it), and `make` compiles any `po/<lang>.po` into the package.

@@ -11,9 +11,11 @@ import St from 'gi://St';
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+import { VERTICAL } from './compat.js';
 import { N_ } from './format.js';
 import { ActivityGraph } from './graph.js';
 import { USER_AGENT, fetchText, getLocalAddress, isCancelled, parseDefaultRoute, parseNetDev, readFile } from './network.js';
+import { averageJitter } from './speedtest.js';
 import { StatsManager } from './stats.js';
 
 const NETWORK_INFO_CACHE_SECS = 30;
@@ -54,7 +56,7 @@ function connectionType(iface: string): string {
 function createInfoCard(iconName: string, title: string): { card: St.BoxLayout; value: St.Label } {
     const card = new St.BoxLayout({
         style_class: 'speed-meter-info-card',
-        orientation: Clutter.Orientation.VERTICAL,
+        ...VERTICAL,
         x_expand: true,
     });
     const header = new St.BoxLayout({ style_class: 'speed-meter-info-badge-row' });
@@ -103,14 +105,14 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         this.connect('destroy', () => this._releaseResources());
 
         const box = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-dashboard',
         });
         this.add_child(box);
 
         const header = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-dashboard-header',
         });
@@ -126,7 +128,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         this._publicIpValue = publicIp.value;
 
         const grid = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-network-info-grid',
         });
@@ -167,7 +169,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         header.add_child(appBar);
 
         const graphBox = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             style_class: 'speed-meter-graph-container',
         });
         const tabs = new St.BoxLayout({ x_expand: true, style_class: 'speed-meter-tabs-bar' });
@@ -299,9 +301,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
     private _updateQuality(): void {
         const samples = this._qualitySamples;
         const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
-        let jitter = 0;
-        for (let i = 1; i < samples.length; i++)
-            jitter += Math.abs(samples[i] - samples[i - 1]) / (samples.length - 1);
+        const jitter = averageJitter(samples);
 
         const level = QUALITY_LEVELS.find(l => avg < l.maxMs) ?? QUALITY_LEVELS[QUALITY_LEVELS.length - 1];
         this._qualityBadge.text = _(level.label);

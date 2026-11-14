@@ -34,7 +34,7 @@ function monotonicSecs(): number {
     return GLib.get_monotonic_time() / 1e6;
 }
 
-function averageJitter(samples: number[]): number {
+export function averageJitter(samples: number[]): number {
     if (samples.length < 2)
         return 0;
     let sum = 0;

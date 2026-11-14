@@ -10,7 +10,7 @@ import St from 'gi://St';
 import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import { KB, MB, fmtSize, fmtSpeed } from './format.js';
-import { StatsManager } from './stats.js';
+import { StatsManager, dayKey } from './stats.js';
 
 export type GraphMode = 'realtime' | 'monthly';
 
@@ -74,13 +74,12 @@ export class ActivityGraph extends St.DrawingArea {
         if (this._lastUpdateDay === now.getDate())
             return;
 
-        const yearMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         const daily = stats.getDailyData();
         this._dailyTotals = [];
         this._monthlyPeak = 10 * MB;
         for (let day = 1; day <= daysInMonth; day++) {
-            const data = daily[`${yearMonth}-${String(day).padStart(2, '0')}`];
+            const data = daily[dayKey(new Date(now.getFullYear(), now.getMonth(), day))];
             const total = data ? data.rx + data.tx : 0;
             this._dailyTotals.push(total);
             this._monthlyPeak = Math.max(this._monthlyPeak, total);

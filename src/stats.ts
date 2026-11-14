@@ -23,11 +23,11 @@ interface History {
     appUsage: Record<string, Record<string, number>>; // "YYYY-MM" -> { "Firefox": bytes }
 }
 
-function dayKey(date: Date): string {
+export function dayKey(date: Date): string {
     return `${monthKey(date)}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
-function monthKey(date: Date): string {
+export function monthKey(date: Date): string {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }
 

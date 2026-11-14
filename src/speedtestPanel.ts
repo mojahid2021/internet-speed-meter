@@ -9,6 +9,7 @@ import { gettext as _ } from 'resource:///org/gnome/shell/extensions/extension.j
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+import { VERTICAL } from './compat.js';
 import { N_ } from './format.js';
 import { isCancelled } from './network.js';
 import { Direction, SpeedTest } from './speedtest.js';
@@ -36,7 +37,7 @@ const PHASES = [N_('Resolve'), N_('Latency'), N_('Download'), N_('Upload')];
 
 function createMetric(title: string, initial: string): { box: St.BoxLayout; value: St.Label } {
     const box = new St.BoxLayout({
-        orientation: Clutter.Orientation.VERTICAL,
+        ...VERTICAL,
         x_expand: true,
         style_class: 'speed-meter-st-ping-item',
     });
@@ -49,7 +50,7 @@ function createMetric(title: string, initial: string): { box: St.BoxLayout; valu
 function createGauge(direction: Direction): { card: St.BoxLayout; value: St.Label } {
     const kind = direction === 'download' ? 'down' : 'up';
     const card = new St.BoxLayout({
-        orientation: Clutter.Orientation.VERTICAL,
+        ...VERTICAL,
         x_expand: true,
         style_class: `speed-meter-st-gauge-card speed-meter-${kind}-card`,
     });
@@ -116,7 +117,7 @@ export class SpeedTestPanel extends PopupMenu.PopupBaseMenuItem {
         this.connect('destroy', () => this._test?.cancel());
 
         const box = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-st-box',
         });
@@ -124,7 +125,7 @@ export class SpeedTestPanel extends PopupMenu.PopupBaseMenuItem {
 
         const header = new St.BoxLayout({ x_expand: true, style_class: 'speed-meter-st-header' });
         const titles = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
@@ -155,7 +156,7 @@ export class SpeedTestPanel extends PopupMenu.PopupBaseMenuItem {
             y_align: Clutter.ActorAlign.CENTER,
         });
         const serverText = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
@@ -182,7 +183,7 @@ export class SpeedTestPanel extends PopupMenu.PopupBaseMenuItem {
         box.add_child(this._dropdownButton);
 
         const list = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-server-dropdown-list',
         });

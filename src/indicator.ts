@@ -13,11 +13,12 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+import { VERTICAL } from './compat.js';
 import { DashboardSection } from './dashboard.js';
 import { GB, KB, fmtSize, fmtSpeed } from './format.js';
 import { isCancelled, parseNetDev, readFile } from './network.js';
 import { SpeedTestPanel } from './speedtestPanel.js';
-import { StatsManager } from './stats.js';
+import { StatsManager, monthKey } from './stats.js';
 
 const SAVE_INTERVAL_SECS = 60;
 const BATTERY_MIN_INTERVAL_MS = 3000;
@@ -49,7 +50,7 @@ function createStatRow(title: string, color: string): { row: St.BoxLayout; label
     left.add_child(new St.Label({ text: title, style_class: 'speed-meter-stat-label', y_align: Clutter.ActorAlign.CENTER }));
 
     const right = new St.BoxLayout({
-        orientation: Clutter.Orientation.VERTICAL,
+        ...VERTICAL,
         x_align: Clutter.ActorAlign.END,
         y_align: Clutter.ActorAlign.CENTER,
         style_class: 'speed-meter-stat-right',
@@ -76,10 +77,6 @@ function wrapInMenuItem(child: St.Widget): PopupMenu.PopupBaseMenuItem {
     item.add_style_class_name('speed-meter-section');
     item.add_child(child);
     return item;
-}
-
-function monthKey(date: Date): string {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }
 
 export class SpeedIndicator extends PanelMenu.Button {
@@ -140,7 +137,7 @@ export class SpeedIndicator extends PanelMenu.Button {
         this._speedTest.visible = false;
 
         const statsCard = new St.BoxLayout({
-            orientation: Clutter.Orientation.VERTICAL,
+            ...VERTICAL,
             x_expand: true,
             style_class: 'speed-meter-stats-card',
         });
