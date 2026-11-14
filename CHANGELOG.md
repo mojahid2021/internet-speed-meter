@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3] - 2026-11-14
+
+### Changed (code structure)
+- Split the 2,300-line `extension.ts` into single-purpose modules: `indicator.ts`, `dashboard.ts`, `speedtestPanel.ts`, `speedtest.ts`, `network.ts` and `format.ts`. `extension.ts` now only creates and destroys the indicator. Each widget class releases its own timers, network sessions and signal handlers when it is destroyed, which replaces the ~70-line per-widget `disable()`.
+- Async code uses promises (`Gio._promisify`) with cancellation errors instead of nested callbacks and state flags. The speed test progress bar is a Clutter animation instead of a 200 ms timer.
+- Removed defensive `try`/`catch` and null checks around calls that cannot fail, unused methods, duplicated formatting helpers and the `as any` casts (caused by mismatched `@girs` type package versions, now pinned).
+- Preferences use `Adw.SpinRow` and two small helpers instead of repeated row boilerplate.
+- Stylesheet: removed selectors that could never match and two unused rules, and rewrote the comments.
+- `metadata.json` no longer has the deprecated `version` key.
+- The connection-quality probe uses `GET` (the previous `HEAD` request got a 404).
+
+### Fixed
+- A speed test that was running when the extension got disabled (e.g. on screen lock) no longer continues in the background: it used to open a new network session, run the download/upload phases, and post a "Speedtest Complete" notification after disable, and blocked the Speedtest button after re-enable.
+- The UPower battery-status reply can no longer recreate the poll timer if it arrives after the extension was disabled.
+- Battery state is now followed live via UPower `PropertiesChanged`; previously it was read once at enable, so plugging in or unplugging was never noticed by the adaptive power saver.
+- Per-app traffic now follows the focused application as it changes (`notify::focus-app`); previously the app was only re-read when the menu opened, so traffic was credited to a stale app.
+- The route-table read on menu open is now cancellable on disable.
+- Application-usage history is now pruned like monthly history, and pruning runs on every save instead of only at the top of the hour.
+
+### Added
+- Translation support: every UI string is translatable (`gettext-domain` in metadata). The template is at `po/speed-meter@mojahid.lunecode.com.pot` (`make pot` regenerates it), and `make` compiles any `po/<lang>.po` into the package.
+
+### Changed
+- The connection-quality probe (HTTPS request to 1.1.1.1 every 30 s) now runs only while the menu is open; nothing is sent in the background while the menu is closed. The extension description now discloses this probe.
+- The speed test panel header no longer uses third-party trademarks ("SPEEDTEST / powered by Ookla" → "SPEED TEST / via public speedtest.net servers"); related CSS classes renamed from `speed-meter-ookla-*` to `speed-meter-st-*`.
+- CSV export now asks where to save via a file chooser instead of silently overwriting `~/speed-meter-stats.csv`.
+- Per-app tracking setting and schema descriptions now say what it actually does (traffic attributed to the focused app) instead of claiming per-process accounting; the adaptive power saver description no longer mentions metered connections, which it never handled.
+- Shipped JS now keeps source comments (including the SPDX license header).
+- `make test` uses `--devkit` on GNOME 49+.
+
 ## [1.5.2] - 2026-11-08
 
 ### Changed
