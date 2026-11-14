@@ -68,12 +68,8 @@ export class ActivityGraph extends St.DrawingArea {
             this.queue_repaint();
     }
 
-    // Recomputes the daily bars at most once per day.
     updateFromStats(stats: StatsManager): void {
         const now = new Date();
-        if (this._lastUpdateDay === now.getDate())
-            return;
-
         const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
         const daily = stats.getDailyData();
         this._dailyTotals = [];

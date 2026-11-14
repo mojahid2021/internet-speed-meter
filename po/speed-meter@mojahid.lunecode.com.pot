@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Internet Speed Meter 1.5.3\n"
 "Report-Msgid-Bugs-To: aammojahid@gmail.com\n"
-"POT-Creation-Date: 2026-11-14 17:46+0600\n"
+"POT-Creation-Date: 2026-11-14 21:09+0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,159 +17,155 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: dist/dashboard.js:27
+#: dist/dashboard.js:29
 msgid "EXCELLENT"
 msgstr ""
 
-#: dist/dashboard.js:28
+#: dist/dashboard.js:30
 msgid "GOOD"
 msgstr ""
 
-#: dist/dashboard.js:29
+#: dist/dashboard.js:31
 msgid "FAIR"
 msgstr ""
 
-#: dist/dashboard.js:30
+#: dist/dashboard.js:32
 msgid "POOR"
 msgstr ""
 
-#: dist/dashboard.js:34
+#: dist/dashboard.js:36
 msgid "Disconnected"
 msgstr ""
 
-#: dist/dashboard.js:36
+#: dist/dashboard.js:38
 msgid "WiFi"
 msgstr ""
 
-#: dist/dashboard.js:38
+#: dist/dashboard.js:40
 msgid "Ethernet"
 msgstr ""
 
-#: dist/dashboard.js:40
+#: dist/dashboard.js:42
 msgid "Mobile"
 msgstr ""
 
-#: dist/dashboard.js:42 dist/dashboard.js:103
+#: dist/dashboard.js:44 dist/dashboard.js:108
 msgid "VPN Tunnel"
 msgstr ""
 
-#: dist/dashboard.js:43
+#: dist/dashboard.js:45
 msgid "Wired"
 msgstr ""
 
-#: dist/dashboard.js:102
+#: dist/dashboard.js:107
 msgid "Connection"
 msgstr ""
 
-#: dist/dashboard.js:104
+#: dist/dashboard.js:109
 msgid "Local IP"
 msgstr ""
 
-#: dist/dashboard.js:105
+#: dist/dashboard.js:110
 msgid "Public IP"
 msgstr ""
 
-#: dist/dashboard.js:124
+#: dist/dashboard.js:130
 msgid "MEASURING..."
 msgstr ""
 
-#: dist/dashboard.js:137
+#: dist/dashboard.js:144 dist/speedtestPanel.js:161 dist/speedtestPanel.js:243
 msgid "Ping"
 msgstr ""
 
-#: dist/dashboard.js:139
+#: dist/dashboard.js:146 dist/speedtestPanel.js:162
 msgid "Jitter"
 msgstr ""
 
-#: dist/dashboard.js:143 dist/indicator.js:308
+#: dist/dashboard.js:150 dist/indicator.js:303
 msgid "System"
 msgstr ""
 
-#: dist/dashboard.js:145
+#: dist/dashboard.js:152
 msgid "Active App:"
 msgstr ""
 
-#: dist/dashboard.js:153
+#: dist/dashboard.js:160
 msgid "Live Wave"
 msgstr ""
 
-#: dist/dashboard.js:154
+#: dist/dashboard.js:161
 msgid "30-Day Peak"
 msgstr ""
 
-#: dist/dashboard.js:223
+#: dist/dashboard.js:230
 msgid "none"
 msgstr ""
 
-#: dist/dashboard.js:226
+#: dist/dashboard.js:234
 msgid "None"
 msgstr ""
 
-#: dist/dashboard.js:229 dist/dashboard.js:251
+#: dist/dashboard.js:237 dist/dashboard.js:258
 msgid "Unavailable"
 msgstr ""
 
-#: dist/dashboard.js:237
-msgid "Fetching..."
-msgstr ""
-
-#: dist/graph.js:113
+#: dist/graph.js:110
 #, javascript-format
 msgid "Peak: %s"
 msgstr ""
 
-#: dist/graph.js:116
+#: dist/graph.js:113
 msgid "now"
 msgstr ""
 
-#: dist/graph.js:175
+#: dist/graph.js:172
 #, javascript-format
 msgid "Monthly Peak: %s"
 msgstr ""
 
-#: dist/graph.js:177 dist/graph.js:178
+#: dist/graph.js:174 dist/graph.js:175
 #, javascript-format
 msgid "Day %d"
 msgstr ""
 
-#: dist/indicator.js:117
+#: dist/indicator.js:115
 msgid "Today"
 msgstr ""
 
-#: dist/indicator.js:118
+#: dist/indicator.js:116
 msgid "This Month"
 msgstr ""
 
-#: dist/indicator.js:119
+#: dist/indicator.js:117
 msgid "Last Month"
 msgstr ""
 
-#: dist/indicator.js:120
+#: dist/indicator.js:118
 msgid "Current Session"
 msgstr ""
 
-#: dist/indicator.js:129
+#: dist/indicator.js:127
 msgid "Reset"
 msgstr ""
 
-#: dist/indicator.js:135
+#: dist/indicator.js:133
 msgid "Speedtest"
 msgstr ""
 
-#: dist/indicator.js:140
+#: dist/indicator.js:135
 msgid "Settings"
 msgstr ""
 
-#: dist/indicator.js:303
+#: dist/indicator.js:298
 msgid "Disabled"
 msgstr ""
 
-#: dist/indicator.js:328
+#: dist/indicator.js:323
 #, javascript-format
 msgid "Monthly data quota of %d GB reached."
 msgstr ""
 
-#: dist/indicator.js:333
+#: dist/indicator.js:328
 #, javascript-format
 msgid "80%% of the monthly data quota (%d GB) used."
 msgstr ""
@@ -351,175 +347,202 @@ msgstr ""
 msgid "Export failed: %s"
 msgstr ""
 
-#: dist/speedtestPanel.js:16
-msgid "Auto · Nearest"
-msgstr ""
-
-#: dist/speedtestPanel.js:17
+#: dist/speedtestPanel.js:19
 msgid "New York, US"
 msgstr ""
 
-#: dist/speedtestPanel.js:18
+#: dist/speedtestPanel.js:20
 msgid "San Francisco, US"
 msgstr ""
 
-#: dist/speedtestPanel.js:19
+#: dist/speedtestPanel.js:21
 msgid "Toronto, CA"
 msgstr ""
 
-#: dist/speedtestPanel.js:20
+#: dist/speedtestPanel.js:22
 msgid "São Paulo, BR"
 msgstr ""
 
-#: dist/speedtestPanel.js:21
+#: dist/speedtestPanel.js:23
 msgid "London, UK"
 msgstr ""
 
-#: dist/speedtestPanel.js:22
+#: dist/speedtestPanel.js:24
 msgid "Frankfurt, DE"
 msgstr ""
 
-#: dist/speedtestPanel.js:23
+#: dist/speedtestPanel.js:25
 msgid "Dubai, AE"
 msgstr ""
 
-#: dist/speedtestPanel.js:24
+#: dist/speedtestPanel.js:26
 msgid "Mumbai, IN"
 msgstr ""
 
-#: dist/speedtestPanel.js:25
+#: dist/speedtestPanel.js:27
 msgid "Singapore, SG"
 msgstr ""
 
-#: dist/speedtestPanel.js:26
+#: dist/speedtestPanel.js:28
 msgid "Tokyo, JP"
 msgstr ""
 
-#: dist/speedtestPanel.js:27
+#: dist/speedtestPanel.js:29
 msgid "Sydney, AU"
 msgstr ""
 
-#: dist/speedtestPanel.js:29
-msgid "Resolve"
+#: dist/speedtestPanel.js:41
+#, javascript-format
+msgid "%d km"
 msgstr ""
 
-#: dist/speedtestPanel.js:29
-msgid "Latency"
+#: dist/speedtestPanel.js:45
+msgid "The test failed. Check your connection and try again."
 msgstr ""
 
-#: dist/speedtestPanel.js:29
-msgid "Download"
+#: dist/speedtestPanel.js:47
+msgid "Good for browsing, email and SD video."
 msgstr ""
 
-#: dist/speedtestPanel.js:29
-msgid "Upload"
+#: dist/speedtestPanel.js:49
+msgid "Good for HD streaming and video calls."
 msgstr ""
 
-#: dist/speedtestPanel.js:54
-msgid "DOWNLOAD"
+#: dist/speedtestPanel.js:50
+msgid "Fast enough for 4K streaming and large downloads."
 msgstr ""
 
-#: dist/speedtestPanel.js:54
-msgid "UPLOAD"
+#: dist/speedtestPanel.js:96
+msgid "Back"
 msgstr ""
 
-#: dist/speedtestPanel.js:72
-msgid "TEST FAILED — CHECK CONNECTION"
+#: dist/speedtestPanel.js:103
+msgid "Speed Test"
 msgstr ""
 
-#: dist/speedtestPanel.js:74
-msgid "TEST COMPLETE — BASIC BROADBAND"
-msgstr ""
-
-#: dist/speedtestPanel.js:76
-msgid "TEST COMPLETE — FAST HIGH-SPEED"
-msgstr ""
-
-#: dist/speedtestPanel.js:77
-msgid "TEST COMPLETE — OPTIMAL FOR 4K STREAMING"
-msgstr ""
-
-#: dist/speedtestPanel.js:115
-msgid "SPEED TEST"
-msgstr ""
-
-#: dist/speedtestPanel.js:116
+#: dist/speedtestPanel.js:104
 msgid "via public speedtest.net servers"
 msgstr ""
 
-#: dist/speedtestPanel.js:121
-msgid "Close"
+#: dist/speedtestPanel.js:127
+msgid "Choose server"
 msgstr ""
 
-#: dist/speedtestPanel.js:145
-msgid "SERVER"
+#: dist/speedtestPanel.js:159 dist/speedtestPanel.js:271
+#: dist/speedtestPanel.js:289
+msgid "Download"
 msgstr ""
 
-#: dist/speedtestPanel.js:227
-msgid "PING"
+#: dist/speedtestPanel.js:160 dist/speedtestPanel.js:271
+msgid "Upload"
 msgstr ""
 
-#: dist/speedtestPanel.js:228
-msgid "JITTER"
+#: dist/speedtestPanel.js:163
+msgid "Loss"
+msgstr ""
+
+#: dist/speedtestPanel.js:195
+msgid "Choose a server, then press Start."
+msgstr ""
+
+#: dist/speedtestPanel.js:195 dist/speedtestPanel.js:285
+msgid "Start"
+msgstr ""
+
+#: dist/speedtestPanel.js:205
+msgid "Finding nearby servers…"
+msgstr ""
+
+#: dist/speedtestPanel.js:225
+msgid "Cancel"
 msgstr ""
 
 #: dist/speedtestPanel.js:229
-msgid "LOSS"
+msgid "Connecting"
 msgstr ""
 
-#: dist/speedtestPanel.js:255
-msgid "Tap START TEST to measure your connection"
+#: dist/speedtestPanel.js:230
+msgid "Finding the best server…"
 msgstr ""
 
-#: dist/speedtestPanel.js:263 dist/speedtestPanel.js:346
-msgid "START TEST"
+#: dist/speedtestPanel.js:242
+msgid "Measuring latency…"
 msgstr ""
 
-#: dist/speedtestPanel.js:296
-msgid "CANCEL"
+#: dist/speedtestPanel.js:243
+msgid "ms"
 msgstr ""
 
-#: dist/speedtestPanel.js:300
-msgid "RESOLVING SERVER..."
-msgstr ""
-
-#: dist/speedtestPanel.js:307
-msgid "TESTING LATENCY..."
-msgstr ""
-
-#: dist/speedtestPanel.js:309 dist/speedtestPanel.js:310
-#: dist/speedtestPanel.js:311 dist/speedtestPanel.js:316
-#: dist/speedtestPanel.js:353
+#: dist/speedtestPanel.js:245 dist/speedtestPanel.js:247
+#: dist/speedtestPanel.js:248 dist/speedtestPanel.js:292
 msgid "N/A"
 msgstr ""
 
-#: dist/speedtestPanel.js:312
-msgid "TESTING DOWNLOAD SPEED..."
+#: dist/speedtestPanel.js:250
+msgid "Measuring download speed…"
 msgstr ""
 
-#: dist/speedtestPanel.js:314
-msgid "TESTING UPLOAD SPEED..."
+#: dist/speedtestPanel.js:252
+msgid "Measuring upload speed…"
 msgstr ""
 
-#: dist/speedtestPanel.js:345
-msgid "Test cancelled — press START TEST to try again"
+#: dist/speedtestPanel.js:271 dist/speedtestPanel.js:289
+#: dist/speedtestPanel.js:299
+msgid "Mbps"
 msgstr ""
 
-#: dist/speedtestPanel.js:351
-msgid "RUN AGAIN"
+#: dist/speedtestPanel.js:285
+msgid "Test cancelled."
 msgstr ""
 
-#: dist/speedtestPanel.js:353
+#: dist/speedtestPanel.js:291
+msgid "Run Again"
+msgstr ""
+
+#: dist/speedtestPanel.js:292
 msgid "Speedtest Complete"
 msgstr ""
 
-#: dist/speedtestPanel.js:353
+#: dist/speedtestPanel.js:292
 #, javascript-format
 msgid "Download: %s Mbps | Upload: %s Mbps | Ping: %s"
 msgstr ""
 
-#: dist/speedtestPanel.js:385
-msgid "Press START TEST to begin"
+#: dist/speedtestPanel.js:295
+msgid "Try Again"
+msgstr ""
+
+#: dist/speedtestPanel.js:299
+msgid "Ready"
+msgstr ""
+
+#: dist/speedtestPanel.js:328
+#, javascript-format
+msgid "Automatic · %s"
+msgstr ""
+
+#: dist/speedtestPanel.js:332 dist/speedtestPanel.js:357
+msgid "Best server near this city"
+msgstr ""
+
+#: dist/speedtestPanel.js:335 dist/speedtestPanel.js:352
+msgid "Automatic"
+msgstr ""
+
+#: dist/speedtestPanel.js:337 dist/speedtestPanel.js:352
+msgid "Lowest ping of the nearest servers"
+msgstr ""
+
+#: dist/speedtestPanel.js:338
+msgid "Nearest server with the lowest ping"
+msgstr ""
+
+#: dist/speedtestPanel.js:351
+msgid "Near you"
+msgstr ""
+
+#: dist/speedtestPanel.js:355
+msgid "Other regions"
 msgstr ""
 
 #: src/schemas/org.gnome.shell.extensions.speed-meter.gschema.xml:8

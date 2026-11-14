@@ -23,12 +23,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-app traffic now follows the focused application as it changes (`notify::focus-app`); previously the app was only re-read when the menu opened, so traffic was credited to a stale app.
 - The route-table read on menu open is now cancellable on disable.
 - Application-usage history is now pruned like monthly history, and pruning runs on every save instead of only at the top of the hour.
+- Speed test: the PING / JITTER / LOSS and DOWNLOAD / UPLOAD titles are no longer cut off ("PI…", "DOWNLO…"), and the progress bar is visible (it had zero width).
+- The 30-Day Peak graph now keeps today's bar current instead of freezing it at the first menu open of the day.
+- With auto-hide on, the panel button no longer hides while its menu is open.
+- The public IP no longer flickers to "Fetching..." on every refresh; the last value stays until the new one arrives.
+- Mobile broadband interfaces (`wwan*`) show as Mobile instead of Wired.
+- The Connection card icon follows Wi-Fi vs Ethernet, and the quality icon shows signal bars matching the measured level.
 - Vertical panel layouts work on GNOME 45–47 again: `St.BoxLayout` only gained `orientation` in GNOME 48 (and lost `vertical` in 51), so the extension now picks the property for the running Shell version.
 
 ### Added
 - Translation support: every UI string is translatable (`gettext-domain` in metadata). The template is at `po/speed-meter@mojahid.lunecode.com.pot` (`make pot` regenerates it), and `make` compiles any `po/<lang>.po` into the package.
 
 ### Changed
+- Redesigned speed test page. Opening it no longer starts a test: you choose a server, then press Start. The server picker lists the nearest real speedtest.net servers (name, city, distance), with Automatic (lowest ping of the nearest four) first, plus an "Other regions" section (New York, London, Tokyo, …) that tests against the best server near that city. One large live value follows the running phase (ping, download, upload), with all five results underneath and a plain-language rating at the end. The extension description now says that opening the page loads the server list.
 - The connection-quality probe (HTTPS request to 1.1.1.1 every 30 s) now runs only while the menu is open; nothing is sent in the background while the menu is closed. The extension description now discloses this probe.
 - The speed test panel header no longer uses third-party trademarks ("SPEEDTEST / powered by Ookla" → "SPEED TEST / via public speedtest.net servers"); related CSS classes renamed from `speed-meter-ookla-*` to `speed-meter-st-*`.
 - CSV export now asks where to save via a file chooser instead of silently overwriting `~/speed-meter-stats.csv`.

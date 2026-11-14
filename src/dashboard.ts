@@ -32,11 +32,11 @@ const VPN_TYPES: { pattern: RegExp; name: string; color: string }[] = [
     { pattern: /^(tun\d*|tap\d*|ppp\d*|openvpn.*)$/i, name: 'OpenVPN / TUN', color: '#2ec27e' },
 ];
 
-const QUALITY_LEVELS: { maxMs: number; label: string; styleClass: string }[] = [
-    { maxMs: 30, label: N_('EXCELLENT'), styleClass: 'speed-meter-quality-excellent' },
-    { maxMs: 80, label: N_('GOOD'), styleClass: 'speed-meter-quality-good' },
-    { maxMs: 150, label: N_('FAIR'), styleClass: 'speed-meter-quality-fair' },
-    { maxMs: Infinity, label: N_('POOR'), styleClass: 'speed-meter-quality-poor' },
+const QUALITY_LEVELS: { maxMs: number; label: string; styleClass: string; icon: string }[] = [
+    { maxMs: 30, label: N_('EXCELLENT'), styleClass: 'speed-meter-quality-excellent', icon: 'network-cellular-signal-excellent-symbolic' },
+    { maxMs: 80, label: N_('GOOD'), styleClass: 'speed-meter-quality-good', icon: 'network-cellular-signal-good-symbolic' },
+    { maxMs: 150, label: N_('FAIR'), styleClass: 'speed-meter-quality-fair', icon: 'network-cellular-signal-ok-symbolic' },
+    { maxMs: Infinity, label: N_('POOR'), styleClass: 'speed-meter-quality-poor', icon: 'network-cellular-signal-weak-symbolic' },
 ];
 
 function connectionType(iface: string): string {
@@ -46,26 +46,27 @@ function connectionType(iface: string): string {
         return _('WiFi');
     if (iface.startsWith('en') || iface.startsWith('eth'))
         return _('Ethernet');
-    if (iface.startsWith('ppp'))
+    if (iface.startsWith('ppp') || iface.startsWith('ww'))
         return _('Mobile');
     if (iface.startsWith('tun') || iface.startsWith('wg'))
         return _('VPN Tunnel');
     return _('Wired');
 }
 
-function createInfoCard(iconName: string, title: string): { card: St.BoxLayout; value: St.Label } {
+function createInfoCard(iconName: string, title: string): { card: St.BoxLayout; icon: St.Icon; value: St.Label } {
     const card = new St.BoxLayout({
         style_class: 'speed-meter-info-card',
         ...VERTICAL,
         x_expand: true,
     });
     const header = new St.BoxLayout({ style_class: 'speed-meter-info-badge-row' });
-    header.add_child(new St.Icon({ icon_name: iconName, style_class: 'speed-meter-info-icon' }));
+    const icon = new St.Icon({ icon_name: iconName, style_class: 'speed-meter-info-icon' });
+    header.add_child(icon);
     header.add_child(new St.Label({ text: title, style_class: 'speed-meter-info-label' }));
     const value = new St.Label({ text: '…', style_class: 'speed-meter-info-value' });
     card.add_child(header);
     card.add_child(value);
-    return { card, value };
+    return { card, icon, value };
 }
 
 function createTabButton(iconName: string, title: string): St.Button {
@@ -89,10 +90,12 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
     private _vpnColor: string | null = null;
     private _lightMode = false;
 
+    private _ifaceIcon: St.Icon;
     private _ifaceValue: St.Label;
     private _vpnValue: St.Label;
     private _localIpValue: St.Label;
     private _publicIpValue: St.Label;
+    private _qualityIcon: St.Icon;
     private _qualityBadge: St.Label;
     private _pingValue: St.Label;
     private _jitterValue: St.Label;
@@ -122,6 +125,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         const vpn = createInfoCard('network-vpn-symbolic', _('VPN Tunnel'));
         const localIp = createInfoCard('network-transmit-receive-symbolic', _('Local IP'));
         const publicIp = createInfoCard('globe-symbolic', _('Public IP'));
+        this._ifaceIcon = iface.icon;
         this._ifaceValue = iface.value;
         this._vpnValue = vpn.value;
         this._localIpValue = localIp.value;
@@ -149,11 +153,12 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         });
         this._pingValue = new St.Label({ text: '---', style_class: 'speed-meter-quality-val', y_align: Clutter.ActorAlign.CENTER });
         this._jitterValue = new St.Label({ text: '---', style_class: 'speed-meter-quality-val', y_align: Clutter.ActorAlign.CENTER });
-        quality.add_child(new St.Icon({
-            icon_name: 'network-wireless-signal-excellent-symbolic',
+        this._qualityIcon = new St.Icon({
+            icon_name: 'network-cellular-signal-none-symbolic',
             style_class: 'speed-meter-quality-icon',
             y_align: Clutter.ActorAlign.CENTER,
-        }));
+        });
+        quality.add_child(this._qualityIcon);
         quality.add_child(this._qualityBadge);
         quality.add_child(new St.Label({ text: _('Ping'), style_class: 'speed-meter-quality-key', y_align: Clutter.ActorAlign.CENTER }));
         quality.add_child(this._pingValue);
@@ -253,6 +258,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
             ]);
             const iface = parseDefaultRoute(route);
             this._ifaceValue.text = `${connectionType(iface)} (${iface || _('none')})`;
+            this._ifaceIcon.icon_name = iface.startsWith('wl') ? 'network-wireless-symbolic' : 'network-wired-symbolic';
 
             const names = parseNetDev(netDev).map(i => i.name);
             const vpn = VPN_TYPES.find(type => names.some(name => type.pattern.test(name)));
@@ -268,7 +274,6 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
     }
 
     private async _refreshPublicIp(): Promise<void> {
-        this._publicIpValue.text = _('Fetching...');
         for (const url of PUBLIC_IP_URLS) {
             try {
                 const ip = (await fetchText(this._session, url, this._cancellable))?.trim();
@@ -306,6 +311,7 @@ export class DashboardSection extends PopupMenu.PopupBaseMenuItem {
         const level = QUALITY_LEVELS.find(l => avg < l.maxMs) ?? QUALITY_LEVELS[QUALITY_LEVELS.length - 1];
         this._qualityBadge.text = _(level.label);
         this._qualityBadge.style_class = `speed-meter-quality-badge ${level.styleClass}`;
+        this._qualityIcon.icon_name = level.icon;
         this._pingValue.text = `${Math.round(avg)} ms`;
         this._jitterValue.text = `±${jitter.toFixed(1)} ms`;
     }

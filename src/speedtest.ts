@@ -7,6 +7,7 @@ import Soup from 'gi://Soup?version=3.0';
 
 import { USER_AGENT, fetchText, isCancelled } from './network.js';
 
+const SERVER_LIST_URL = 'https://www.speedtest.net/api/js/servers?engine=js&limit=10&https_functional=true';
 const PROBE_TIMEOUT_MS = 2000;
 const LATENCY_SAMPLES = 5;
 const CONCURRENCY = 3;
@@ -19,7 +20,9 @@ const UPLOAD_SIZES = [250000, 500000, 1000000, 2000000, 4000000];
 export interface Server {
     host: string;
     name: string;
+    country: string;
     sponsor: string;
+    distanceKm: number;
 }
 
 export interface Latency {
@@ -58,28 +61,31 @@ export class SpeedTest {
         this._session.abort();
     }
 
-    async findServer(lat: number | null, lon: number | null): Promise<Server | null> {
-        let url = 'https://www.speedtest.net/api/js/servers?engine=js&limit=5&https_functional=true';
-        if (lat !== null && lon !== null)
-            url += `&lat=${lat}&lon=${lon}`;
-
+    // Servers closest first: to the given coordinates, or to the user by GeoIP. Empty when the list could not be read.
+    async listServers(lat: number | null = null, lon: number | null = null): Promise<Server[]> {
+        const url = lat !== null && lon !== null ? `${SERVER_LIST_URL}&lat=${lat}&lon=${lon}` : SERVER_LIST_URL;
         const text = await fetchText(this._session, url, this._cancellable);
         let list: unknown;
         try {
             list = JSON.parse(text ?? '');
         } catch {
-            return null;
+            return [];
         }
         if (!Array.isArray(list))
-            return null;
-
-        const candidates: Server[] = list.slice(0, 4)
+            return [];
+        return list
             .filter(s => s?.host)
-            .map(s => ({ host: String(s.host), name: String(s.name ?? ''), sponsor: String(s.sponsor ?? '') }));
-        if (candidates.length === 0)
-            return null;
+            .map(s => ({
+                host: String(s.host),
+                name: String(s.name ?? ''),
+                country: String(s.country ?? ''),
+                sponsor: String(s.sponsor ?? ''),
+                distanceKm: Number(s.distance) || 0,
+            }));
+    }
 
-        // Probe every candidate in parallel and keep the fastest one that answered in time.
+    // Probes the candidates in parallel and returns the fastest one that answered in time, else the first.
+    async pickFastest(candidates: Server[]): Promise<Server> {
         const pings = new Map<Server, number>();
         const probes = candidates.map(async server => {
             const start = monotonicSecs();

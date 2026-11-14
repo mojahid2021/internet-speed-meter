@@ -297,7 +297,7 @@
     letter-spacing: 0.2px;
 }
 
-/* Speed test panel */
+/* Speed test page */
 
 .speed-meter-st-panel {
     background-color: transparent;
@@ -308,352 +308,232 @@
 }
 
 .speed-meter-st-box {
-    padding: 16px 18px 14px;
+    padding: 14px 16px;
     spacing: 12px;
 }
 
-/* Header */
 .speed-meter-st-header {
-    margin-bottom: 0;
+    spacing: 10px;
 }
 
-.speed-meter-st-brand {
-    font-size: 11pt;
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.92);
-    letter-spacing: 2px;
-}
-
-.speed-meter-st-brand-sub {
-    font-size: 7pt;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.35);
-    letter-spacing: 0.3px;
-    margin-top: 1px;
-}
-
-.speed-meter-close-btn {
-    padding: 4px 8px;
-    border-radius: 8px;
+.speed-meter-st-back {
+    padding: 6px;
+    border-radius: 9999px;
     background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
 }
 
-/* Server selection */
-.speed-meter-server-dropdown-btn {
-    background-color: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 9px 12px;
+.speed-meter-st-back:hover,
+.speed-meter-st-back:focus {
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
-.speed-meter-server-dropdown-btn:active,
-.speed-meter-server-dropdown-btn.active {
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.20);
+.speed-meter-st-title {
+    font-size: 12pt;
+    font-weight: 800;
+    color: #ffffff;
 }
 
-.speed-meter-server-dropdown-row {
-    spacing: 10px;
-}
-
-.speed-meter-server-dropdown-icon {
-    icon-size: 16px;
-    color: rgba(255, 255, 255, 0.70);
-}
-
-.speed-meter-server-caption {
-    font-size: 6.5pt;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.40);
-    letter-spacing: 0.8px;
-}
-
-.speed-meter-server-dropdown-label {
-    font-size: 8.5pt;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.90);
-    margin-top: 1px;
-}
-
-.speed-meter-server-dropdown-arrow {
-    icon-size: 12px;
-    color: rgba(255, 255, 255, 0.40);
-}
-
-/* Server list */
-.speed-meter-server-dropdown-scroll {
-    max-height: 148px;
-    background-color: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 10px;
-    padding: 4px;
-}
-
-.speed-meter-server-dropdown-list {
-    spacing: 1px;
-}
-
-.speed-meter-server-dropdown-item {
-    border-radius: 7px;
-    padding: 6px 10px;
-}
-
-.speed-meter-server-dropdown-item:active {
-    background-color: rgba(0, 210, 255, 0.14);
-}
-
-.speed-meter-server-dropdown-item.selected {
-    background-color: rgba(53, 132, 228, 0.15);
-}
-
-.speed-meter-server-item-box {
-    spacing: 8px;
-}
-
-.speed-meter-server-item-icon {
-    icon-size: 12px;
-    color: rgba(255, 255, 255, 0.30);
-}
-
-.speed-meter-server-dropdown-item.selected .speed-meter-server-item-icon {
-    color: #78aeed;
-}
-
-.speed-meter-server-item-label {
+.speed-meter-st-subtitle {
     font-size: 8pt;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.45);
 }
 
-.speed-meter-server-dropdown-item.selected .speed-meter-server-item-label {
-    color: #78aeed;
-    font-weight: 700;
-}
-
-.speed-meter-server-item-check {
-    icon-size: 12px;
-    color: #78aeed;
-}
-
-/* Ping, jitter and loss */
-.speed-meter-st-ping-strip {
-    background-color: rgba(255, 255, 255, 0.025);
-    border-radius: 10px;
+/* Server picker */
+.speed-meter-st-server {
     padding: 10px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.speed-meter-st-ping-item {
-    spacing: 2px;
+.speed-meter-st-server:hover,
+.speed-meter-st-server:focus,
+.speed-meter-st-server.open {
+    background-color: rgba(255, 255, 255, 0.09);
 }
 
-.speed-meter-st-ping-lbl {
-    font-size: 6.5pt;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.38);
-    letter-spacing: 0.9px;
-    text-align: center;
-}
-
-.speed-meter-st-ping-val {
-    font-size: 10pt;
-    font-weight: 900;
-    color: #ffffff;
-    text-align: center;
-}
-
-/* Result cards */
-.speed-meter-st-gauges-row {
+.speed-meter-st-server-row {
     spacing: 10px;
 }
 
-.speed-meter-st-gauge-card {
+.speed-meter-st-server-icon {
+    icon-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.speed-meter-st-server-name {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.speed-meter-st-server-detail {
+    font-size: 8pt;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.speed-meter-st-server-scroll {
+    max-height: 220px;
     border-radius: 12px;
-    padding: 12px 8px 10px;
-    margin: 0;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.speed-meter-st-server-list {
+    padding: 4px;
     spacing: 2px;
 }
 
-.speed-meter-down-card {
-    background-color: rgba(0, 210, 255, 0.055);
-    border: 1px solid rgba(0, 210, 255, 0.22);
-}
-
-.speed-meter-up-card {
-    background-color: rgba(224, 86, 253, 0.055);
-    border: 1px solid rgba(224, 86, 253, 0.22);
-}
-
-.speed-meter-gauge-title-row {
-    spacing: 5px;
-    x-align: center;
-}
-
-.speed-meter-st-gauge-arrow {
-    font-size: 9pt;
-    font-weight: 900;
-}
-
-.speed-meter-down-arrow {
-    color: #00d2ff;
-}
-
-.speed-meter-up-arrow {
-    color: #e056fd;
-}
-
-.speed-meter-st-gauge-title {
-    font-size: 7pt;
-    font-weight: 800;
-    letter-spacing: 0.9px;
-}
-
-.speed-meter-down-title {
-    color: rgba(0, 210, 255, 0.80);
-}
-
-.speed-meter-up-title {
-    color: rgba(224, 86, 253, 0.80);
-}
-
-.speed-meter-st-gauge-value {
-    font-size: 24pt;
-    font-weight: 900;
-    margin: 4px 0 0;
-    text-align: center;
-    x-align: center;
-}
-
-.speed-meter-down-value {
-    color: #00d2ff;
-}
-
-.speed-meter-up-value {
-    color: #e056fd;
-}
-
-.speed-meter-st-gauge-unit {
-    font-size: 7.5pt;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.38);
-    letter-spacing: 0.5px;
-    text-align: center;
-    x-align: center;
-}
-
-/* Status */
-.speed-meter-st-status-box {
-    background-color: rgba(255, 255, 255, 0.025);
-    border-radius: 8px;
-    padding: 7px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.045);
-}
-
-.speed-meter-st-status-text {
-    font-size: 7.5pt;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.55);
-    letter-spacing: 0.3px;
-    text-align: center;
-}
-
-/* Start button */
-.speed-meter-st-go-button {
-    background-gradient-direction: horizontal;
-    background-gradient-start: #3584e4;
-    background-gradient-end: #1c71d8;
-    border-radius: 11px;
-    padding: 11px 16px;
-    border: none;
-}
-
-.speed-meter-st-go-button:active {
-    background-gradient-start: #2d74d0;
-    background-gradient-end: #155eb8;
-}
-
-.speed-meter-st-go-inner {
-    spacing: 8px;
-    x-align: center;
-}
-
-.speed-meter-st-go-icon {
-    icon-size: 15px;
-    color: #ffffff;
-}
-
-.speed-meter-st-go-label {
-    font-size: 10pt;
-    font-weight: 900;
-    color: #ffffff;
-    letter-spacing: 1px;
-    text-align: center;
-}
-
-/* Phases */
-.speed-meter-st-phase-row {
-    x-align: center;
-    align-items: center;
-    spacing: 0;
-    padding: 0 0 4px;
-}
-
-.speed-meter-st-phase-sep {
+.speed-meter-st-server-section {
+    padding: 8px 10px 2px;
     font-size: 8pt;
-    color: rgba(255, 255, 255, 0.18);
-    x-align: center;
-}
-
-.speed-meter-st-phase-step {
-    font-size: 7.2pt;
     font-weight: 700;
-    letter-spacing: 0.3px;
-    x-align: center;
-    padding: 2px 7px;
-    border-radius: 5px;
+    color: rgba(255, 255, 255, 0.45);
 }
 
-.speed-meter-st-phase-pending {
-    color: rgba(255, 255, 255, 0.28);
+.speed-meter-st-server-item {
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
-.speed-meter-st-phase-active {
+.speed-meter-st-server-item:hover,
+.speed-meter-st-server-item:focus {
+    background-color: rgba(255, 255, 255, 0.07);
+}
+
+.speed-meter-st-server-item.selected {
+    background-color: rgba(53, 132, 228, 0.18);
+}
+
+/* Live value: follows the running phase */
+.speed-meter-st-hero {
+    padding: 6px 0 2px;
+    spacing: 2px;
+}
+
+.speed-meter-st-hero-caption {
+    font-size: 9pt;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: center;
+}
+
+.speed-meter-st-hero-value {
+    font-size: 34pt;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
     color: #ffffff;
-    background-color: rgba(53, 132, 228, 0.22);
-    border: 1px solid rgba(53, 132, 228, 0.40);
+    text-align: center;
 }
 
-.speed-meter-st-phase-done {
-    color: rgba(46, 194, 126, 0.80);
+.speed-meter-st-hero-value.speed-meter-st-idle {
+    color: rgba(255, 255, 255, 0.25);
 }
 
-/* Progress */
+.speed-meter-st-hero-unit {
+    font-size: 9pt;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.speed-meter-st-hero-value.speed-meter-st-download,
+.speed-meter-st-result-value.speed-meter-st-download {
+    color: #00d2ff;
+}
+
+.speed-meter-st-hero-value.speed-meter-st-upload,
+.speed-meter-st-result-value.speed-meter-st-upload {
+    color: #e056fd;
+}
+
 .speed-meter-st-progress-track {
     height: 4px;
-    background-color: rgba(255, 255, 255, 0.07);
+    margin-top: 10px;
     border-radius: 9999px;
-    x-expand: true;
+    background-color: rgba(255, 255, 255, 0.08);
 }
 
 .speed-meter-st-progress-fill {
     height: 4px;
     border-radius: 9999px;
-    x-expand: true;
 }
 
-.speed-meter-st-progress-fill.progress-download {
+.speed-meter-st-progress-fill.speed-meter-st-download {
     background-color: #00d2ff;
 }
 
-.speed-meter-st-progress-fill.progress-upload {
+.speed-meter-st-progress-fill.speed-meter-st-upload {
     background-color: #e056fd;
 }
 
+/* Results */
+.speed-meter-st-results {
+    padding: 10px 6px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.speed-meter-st-result {
+    spacing: 3px;
+}
+
+.speed-meter-st-result-title {
+    font-size: 7.5pt;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.speed-meter-st-result-value {
+    font-size: 10pt;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #ffffff;
+    text-align: center;
+}
+
+.speed-meter-st-status {
+    font-size: 9pt;
+    color: rgba(255, 255, 255, 0.65);
+    text-align: center;
+}
+
+/* Start / Cancel / Run again */
+.speed-meter-st-action {
+    padding: 11px 16px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.speed-meter-st-action:hover,
+.speed-meter-st-action:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.speed-meter-st-action.primary {
+    background-color: #3584e4;
+}
+
+.speed-meter-st-action.primary:hover,
+.speed-meter-st-action.primary:focus {
+    background-color: #4a90e8;
+}
+
+.speed-meter-st-action.primary:active {
+    background-color: #1c71d8;
+}
+
+.speed-meter-st-action-content {
+    spacing: 8px;
+}
+
 /* Light theme. The rules above are the dark styling; the indicator adds .light-mode to the
-menu when the shell theme renders dark text there. The speed test panel keeps its own dark
-   backdrop in both themes,
-except for its close button,
-which shares the action button style. */
+   menu when the shell theme renders dark text there. */
 
 /* Dashboard header */
 
@@ -783,192 +663,105 @@ which shares the action button style. */
     color: #0369a1;
 }
 
-/* Speed test panel */
-.light-mode .speed-meter-st-panel {
-    background-color: transparent;
-    border: none;
+/* Speed test page */
+.light-mode .speed-meter-st-back {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: #24292f;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-st-brand {
+.light-mode .speed-meter-st-back:hover,
+.light-mode .speed-meter-st-back:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .speed-meter-st-title,
+.light-mode .speed-meter-st-server-name,
+.light-mode .speed-meter-st-hero-value,
+.light-mode .speed-meter-st-result-value {
     color: #1f2328;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-st-brand-sub {
-    color: rgba(0, 0, 0, 0.38);
+.light-mode .speed-meter-st-subtitle,
+.light-mode .speed-meter-st-server-detail,
+.light-mode .speed-meter-st-server-icon,
+.light-mode .speed-meter-st-hero-caption,
+.light-mode .speed-meter-st-hero-unit,
+.light-mode .speed-meter-st-result-title,
+.light-mode .speed-meter-st-server-section,
+.light-mode .speed-meter-st-status {
+    color: #57606a;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-close-btn {
+.light-mode .speed-meter-st-server,
+.light-mode .speed-meter-st-server-scroll,
+.light-mode .speed-meter-st-results {
+    background-color: #f6f8fa;
+    border-color: #e1e4e8;
+}
+
+.light-mode .speed-meter-st-server:hover,
+.light-mode .speed-meter-st-server:focus,
+.light-mode .speed-meter-st-server.open {
+    background-color: #eef1f4;
+}
+
+.light-mode .speed-meter-st-server-item {
+    color: #1f2328;
+}
+
+.light-mode .speed-meter-st-server-item:hover,
+.light-mode .speed-meter-st-server-item:focus {
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-btn {
-    background-color: #f6f8fa;
-    border: 1px solid #d0d7de;
+.light-mode .speed-meter-st-server-item.selected {
+    background-color: rgba(9, 105, 218, 0.1);
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-btn:active,
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-btn.active {
-    background-color: #e9ecef;
-    border-color: #57606a;
+.light-mode .speed-meter-st-hero-value.speed-meter-st-idle {
+    color: rgba(0, 0, 0, 0.2);
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-icon {
-    color: #57606a;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-caption {
-    color: #57606a;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-label {
-    color: #1f2328;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-arrow {
-    color: #57606a;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-scroll {
-    background-color: #ffffff;
-    border: 1px solid #d0d7de;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-item:active {
-    background-color: #e0f2fe;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-item.selected {
-    background-color: #f0f9ff;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-item-icon {
-    color: rgba(0, 0, 0, 0.25);
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-item.selected .speed-meter-server-item-icon {
+.light-mode .speed-meter-st-hero-value.speed-meter-st-download,
+.light-mode .speed-meter-st-result-value.speed-meter-st-download {
     color: #0284c7;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-server-item-label {
-    color: #24292f;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-dropdown-item.selected .speed-meter-server-item-label {
-    color: #0284c7;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-server-item-check {
-    color: #0284c7;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-ping-strip {
-    background-color: #f6f8fa;
-    border: 1px solid #e1e4e8;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-ping-lbl {
-    color: #57606a;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-ping-val {
-    color: #1f2328;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-down-card {
-    background-color: #f0fdfa;
-    border: 1px solid #99f6e4;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-down-title,
-.light-mode .speed-meter-st-panel .speed-meter-down-value,
-.light-mode .speed-meter-st-panel .speed-meter-down-arrow {
-    color: #0d9488;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-up-card {
-    background-color: #fdf2f8;
-    border: 1px solid #fbcfe8;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-up-title,
-.light-mode .speed-meter-st-panel .speed-meter-up-value,
-.light-mode .speed-meter-st-panel .speed-meter-up-arrow {
+.light-mode .speed-meter-st-hero-value.speed-meter-st-upload,
+.light-mode .speed-meter-st-result-value.speed-meter-st-upload {
     color: #c026d3;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-st-gauge-unit {
-    color: #57606a;
+.light-mode .speed-meter-st-progress-track {
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-st-status-box {
-    background-color: #f6f8fa;
-    border: 1px solid #e1e4e8;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-status-text {
-    color: #57606a;
-
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-go-button {
-    background-gradient-direction: horizontal;
-    background-gradient-start: #0969da;
-    background-gradient-end: #1d4ed8;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-go-button:active {
-    background-gradient-start: #0550ae;
-    background-gradient-end: #1e40af;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-go-label {
-    color: #ffffff;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-button {
-    background-color: #f6f8fa;
-    border: 1px solid #d0d7de;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-button:active {
-    background-color: #e9ecef;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-button-icon,
-.light-mode .speed-meter-st-panel .speed-meter-button-label {
-    color: #24292f;
-}
-
-/* Phase Indicator — light mode */
-.light-mode .speed-meter-st-panel .speed-meter-st-phase-pending {
-    color: rgba(0, 0, 0, 0.30);
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-phase-active {
-    color: #0969da;
-    background-color: rgba(9, 105, 218, 0.10);
-    border-color: rgba(9, 105, 218, 0.28);
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-phase-done {
-    color: #1a7f37;
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-phase-sep {
-    color: rgba(0, 0, 0, 0.15);
-}
-
-/* Progress Bar — light mode */
-.light-mode .speed-meter-st-panel .speed-meter-st-progress-track {
-    background-color: rgba(0, 0, 0, 0.06);
-}
-
-.light-mode .speed-meter-st-panel .speed-meter-st-progress-fill.progress-download {
+.light-mode .speed-meter-st-progress-fill.speed-meter-st-download {
     background-color: #0284c7;
 }
 
-.light-mode .speed-meter-st-panel .speed-meter-st-progress-fill.progress-upload {
+.light-mode .speed-meter-st-progress-fill.speed-meter-st-upload {
     background-color: #c026d3;
+}
+
+.light-mode .speed-meter-st-action {
+    background-color: rgba(0, 0, 0, 0.06);
+    color: #1f2328;
+}
+
+.light-mode .speed-meter-st-action:hover,
+.light-mode .speed-meter-st-action:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .speed-meter-st-action.primary {
+    background-color: #3584e4;
+    color: #ffffff;
+}
+
+.light-mode .speed-meter-st-action.primary:hover,
+.light-mode .speed-meter-st-action.primary:focus {
+    background-color: #4a90e8;
 }
 
 /* Connection quality strip */

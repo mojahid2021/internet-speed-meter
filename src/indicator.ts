@@ -162,10 +162,7 @@ export class SpeedIndicator extends PanelMenu.Button {
         });
         const speedTestButton = createActionButton('network-wireless-signal-excellent-symbolic', _('Speedtest'),
             'speed-meter-button speed-meter-speedtest-btn');
-        speedTestButton.connect('clicked', () => {
-            this._showSpeedTest(true);
-            this._speedTest.start();
-        });
+        speedTestButton.connect('clicked', () => this._showSpeedTest(true));
         const settingsButton = createActionButton('preferences-system-symbolic', _('Settings'), 'speed-meter-button');
         settingsButton.connect('clicked', () => openPreferences());
         actions.add_child(resetButton);
@@ -302,7 +299,7 @@ export class SpeedIndicator extends PanelMenu.Button {
 
         const idle = this._settings.get_boolean('auto-hide-idle') &&
             (rxPerSec + txPerSec) / KB < this._settings.get_int('idle-threshold-kb');
-        this.visible = !idle;
+        this.visible = !idle || this._popup.isOpen;
 
         const useBits = this._settings.get_boolean('use-bits');
         if (this._settings.get_boolean('show-download'))
@@ -404,6 +401,8 @@ export class SpeedIndicator extends PanelMenu.Button {
     }
 
     private _showSpeedTest(show: boolean): void {
+        if (show)
+            this._speedTest.loadServers();
         this._speedTest.visible = show;
         this._dashboard.visible = !show;
         this._statsItem.visible = !show;
